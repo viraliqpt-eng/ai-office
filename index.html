@@ -141,6 +141,7 @@
       .btn{width:100%}
     }
   </style>
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
 </head>
 <body>
 <header>
@@ -326,7 +327,9 @@
       <h2>Conte-nos o que precisa de organizar.</h2>
       <p>Preencha o formulário. A informação ficará preparada para ligação futura a um formulário real ou base de dados.</p>
     </div>
-    <form id="leadForm">
+    <form id="leadForm" name="pedido-proposta" method="POST" action="/obrigado.html" data-netlify="true" netlify-honeypot="campo-empresa-website">
+      <input type="hidden" name="form-name" value="pedido-proposta">
+      <p style="display:none"><label>Não preencher: <input name="campo-empresa-website"></label></p>
       <div class="form-grid">
         <div><label for="nome">Nome</label><input id="nome" name="nome" required></div>
         <div><label for="empresa">Empresa</label><input id="empresa" name="empresa" required></div>
@@ -341,12 +344,12 @@
           <select id="pacote" name="pacote"><option>Starter — 199€</option><option>Business — 399€</option><option>Complete — 699€</option></select>
         </div>
         <div><label for="contactoPreferido">Contacto preferido</label>
-          <select id="contactoPreferido"><option>E-mail</option><option>WhatsApp</option></select>
+          <select id="contactoPreferido" name="contacto_preferido"><option>E-mail</option><option>WhatsApp</option></select>
         </div>
         <div class="full"><label for="mensagem">O que pretende melhorar?</label><textarea id="mensagem" name="mensagem" placeholder="Ex.: respostas a clientes, documentos, organização, marketing..."></textarea></div>
         <div class="full"><button class="btn btn-primary" type="submit" style="width:100%">Preparar pedido</button></div>
       </div>
-      <p class="notice">Versão HTML de demonstração: nenhum dado é enviado ou guardado nesta fase.</p>
+      <p class="notice">Os dados serão utilizados apenas para analisar e responder ao seu pedido.</p>
     </form>
   </div>
 </section>
@@ -360,14 +363,6 @@
   </div>
 </footer>
 
-<script>
-document.getElementById('leadForm').addEventListener('submit', function(e){
-  e.preventDefault();
-  const nome = document.getElementById('nome').value;
-  const empresa = document.getElementById('empresa').value;
-  const pacote = document.getElementById('pacote').value;
-  alert(`Pedido preparado com sucesso!\n\nNome: ${nome}\nEmpresa: ${empresa}\nPacote: ${pacote}\n\nNa versão publicada, este pedido será ligado ao sistema escolhido pela AI Office™.`);
-});
-</script>
+
 </body>
 </html>
