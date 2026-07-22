@@ -27,3 +27,17 @@ Credenciais:
 - Palavra-passe: `demo2026`
 
 Este login utiliza apenas JavaScript e sessionStorage. Não oferece segurança real e serve apenas para apresentação do fluxo.
+
+## Fase 5 — Supabase Ready
+
+Esta versão inclui:
+
+- autenticação real preparada para Supabase
+- recuperação de palavra-passe
+- esquema SQL
+- perfis, pedidos, documentos e mensagens
+- Row Level Security
+- bucket privado de documentos
+- modo demonstração de reserva
+
+Leia `SUPABASE_SETUP.md` antes de ativar a integração.

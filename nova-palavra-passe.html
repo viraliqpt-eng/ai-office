@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex"><title>Nova palavra-passe | AI Office™</title>
+<link rel="stylesheet" href="css/login.css">
+</head>
+<body>
+<main class="login-shell">
+<section class="login-panel brand-panel">
+<a href="index.html" class="brand"><img src="assets/logo.svg" width="48"><span>AI OFFICE™</span></a>
+<div class="brand-copy"><span class="eyebrow">Segurança</span><h1>Defina uma nova palavra-passe.</h1><p>Utilize uma combinação forte e exclusiva.</p></div>
+</section>
+<section class="login-panel form-panel">
+<div class="form-wrap">
+<span class="eyebrow">Recuperação</span><h2>Nova palavra-passe</h2>
+<form id="resetForm">
+<label>Nova palavra-passe</label><input id="newPassword" type="password" minlength="8" required>
+<label>Confirmar palavra-passe</label><input id="confirmPassword" type="password" minlength="8" required>
+<button class="login-button">Guardar</button>
+<p class="error" id="resetError"></p>
+</form>
+</div>
+</section>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/config.js"></script><script src="js/supabase-client.js"></script>
+<script>
+document.getElementById('resetForm').addEventListener('submit',async e=>{
+ e.preventDefault();
+ const p=document.getElementById('newPassword').value;
+ const c=document.getElementById('confirmPassword').value;
+ const err=document.getElementById('resetError');
+ if(p!==c){err.textContent='As palavras-passe não coincidem.';err.style.display='block';return;}
+ if(!aiOfficeSupabase){err.textContent='Configure primeiro o Supabase.';err.style.display='block';return;}
+ const {error}=await aiOfficeSupabase.auth.updateUser({password:p});
+ if(error){err.textContent=error.message;err.style.display='block';return;}
+ window.location.href='login.html';
+});
+</script>
+</body>
+</html>

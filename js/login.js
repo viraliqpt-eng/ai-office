@@ -16,28 +16,41 @@ document.getElementById('togglePassword').addEventListener('click', event => {
   event.target.textContent = hidden ? 'Ocultar' : 'Mostrar';
 });
 
-document.getElementById('forgotPassword').addEventListener('click', () => {
-  alert('Na versão real, será enviado um email seguro para redefinir a palavra-passe.');
-});
-
-form.addEventListener('submit', event => {
-  event.preventDefault();
-  const valid = email.value.trim().toLowerCase() === 'cliente@aioffice.pt' &&
-                password.value === 'demo2026';
-
-  if (!valid) {
-    error.style.display = 'block';
+document.getElementById('forgotPassword').addEventListener('click', async () => {
+  if (!aiOfficeSupabase) {
+    alert('No modo demonstração, a recuperação de palavra-passe está desativada.');
     return;
   }
 
-  error.style.display = 'none';
-  sessionStorage.setItem('aiOfficeDemoAuthenticated', 'true');
-
-  if (remember.checked) {
-    localStorage.setItem('aiOfficeRememberedEmail', email.value.trim());
-  } else {
-    localStorage.removeItem('aiOfficeRememberedEmail');
+  const address = email.value.trim();
+  if (!address) {
+    alert('Indique primeiro o seu email.');
+    return;
   }
 
-  window.location.href = 'cliente.html';
+  const { error: resetError } = await aiOfficeSupabase.auth.resetPasswordForEmail(address, {
+    redirectTo: window.location.origin + '/nova-palavra-passe.html'
+  });
+
+  alert(resetError ? resetError.message : 'Email de recuperação enviado.');
+});
+
+form.addEventListener('submit', async event => {
+  event.preventDefault();
+  error.style.display = 'none';
+
+  try {
+    await aiOfficeLogin(email.value.trim(), password.value);
+
+    if (remember.checked) {
+      localStorage.setItem('aiOfficeRememberedEmail', email.value.trim());
+    } else {
+      localStorage.removeItem('aiOfficeRememberedEmail');
+    }
+
+    window.location.href = 'cliente.html';
+  } catch (loginError) {
+    error.textContent = loginError.message || 'Não foi possível iniciar sessão.';
+    error.style.display = 'block';
+  }
 });
