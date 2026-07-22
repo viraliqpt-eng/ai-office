@@ -17,3 +17,13 @@ Este painel é um protótipo sem autenticação e utiliza `localStorage`. Não d
 
 ## Área de cliente
 Aceda a `/cliente.html`. Protótipo sem autenticação ou base de dados real.
+
+## Login de demonstração
+
+Aceda a `/login.html`.
+
+Credenciais:
+- Email: `cliente@aioffice.pt`
+- Palavra-passe: `demo2026`
+
+Este login utiliza apenas JavaScript e sessionStorage. Não oferece segurança real e serve apenas para apresentação do fluxo.
