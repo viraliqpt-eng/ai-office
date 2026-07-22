@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="AI Office™ — O escritório digital da sua empresa. Organização, documentos, IA, WhatsApp e processos prontos a utilizar." />
+  <title>AI Office™ | O escritório digital da sua empresa</title>
+  <meta property="og:title" content="AI Office™ | O escritório digital da sua empresa">
+  <meta property="og:description" content="Documentos, comunicação, organização e inteligência artificial aplicada ao seu negócio.">
+  <meta property="og:type" content="website">
+  <meta name="theme-color" content="#102A43">
+  <style>
+    :root{
+      --navy:#102A43;
+      --blue:#2563EB;
+      --light:#F3F4F6;
+      --dark:#1F2937;
+      --green:#16A34A;
+      --white:#FFFFFF;
+      --muted:#64748B;
+      --line:#DCE3EC;
+      --shadow:0 20px 60px rgba(16,42,67,.13);
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{margin:0;font-family:Inter,Arial,sans-serif;color:var(--dark);background:var(--white);line-height:1.6}
+    a{text-decoration:none;color:inherit}
+    img{max-width:100%;display:block}
+    .container{width:min(1120px,92%);margin:auto}
+    header{
+      position:sticky;top:0;z-index:20;background:rgba(255,255,255,.94);
+      backdrop-filter:blur(12px);border-bottom:1px solid rgba(220,227,236,.85)
+    }
+    .nav{height:76px;display:flex;align-items:center;justify-content:space-between;gap:24px}
+    .brand{display:flex;align-items:center;gap:12px;font-weight:800;color:var(--navy)}
+    .brand-mark{
+      width:44px;height:44px;border-radius:13px;display:grid;place-items:center;color:#fff;
+      background:linear-gradient(135deg,var(--blue),var(--navy));font-weight:900;font-size:17px
+    }
+    .nav-links{display:flex;gap:24px;align-items:center;font-size:14px;font-weight:700}
+    .btn{
+      display:inline-flex;align-items:center;justify-content:center;gap:8px;border-radius:12px;
+      padding:14px 22px;font-weight:800;border:1px solid transparent;cursor:pointer;transition:.2s
+    }
+    .btn-primary{background:var(--blue);color:#fff;box-shadow:0 10px 30px rgba(37,99,235,.22)}
+    .btn-primary:hover{transform:translateY(-2px);background:#1d4ed8}
+    .btn-secondary{border-color:var(--line);background:#fff;color:var(--navy)}
+    .hero{
+      padding:86px 0 72px;
+      background:
+        radial-gradient(circle at 85% 20%, rgba(37,99,235,.16), transparent 30%),
+        linear-gradient(180deg,#fff 0%,#f7faff 100%)
+    }
+    .hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:58px;align-items:center}
+    .eyebrow{display:inline-block;color:var(--blue);font-weight:800;letter-spacing:.08em;text-transform:uppercase;font-size:13px;margin-bottom:14px}
+    h1{font-size:clamp(42px,6vw,72px);line-height:1.02;margin:0 0 22px;color:var(--navy);letter-spacing:-.045em}
+    .lead{font-size:20px;color:var(--muted);max-width:660px;margin:0 0 30px}
+    .hero-actions{display:flex;gap:12px;flex-wrap:wrap}
+    .trust{display:flex;gap:22px;flex-wrap:wrap;margin-top:28px;font-size:14px;color:var(--muted)}
+    .trust span::before{content:"✓";color:var(--green);font-weight:900;margin-right:7px}
+    .hero-card{
+      border-radius:24px;overflow:hidden;background:var(--navy);box-shadow:var(--shadow);
+      border:1px solid rgba(255,255,255,.2)
+    }
+    .hero-card{padding:28px;color:white}
+    .dashboard-head{display:flex;justify-content:space-between;align-items:center;padding-bottom:18px;border-bottom:1px solid rgba(255,255,255,.14)}
+    .dashboard-status{display:flex;align-items:center;gap:8px;font-size:13px;color:#bfdbfe}
+    .dashboard-dot{width:9px;height:9px;border-radius:50%;background:var(--green)}
+    .dashboard-item{margin-top:15px;padding:17px;border-radius:15px;background:rgba(255,255,255,.09)}
+    .dashboard-item strong{display:block;margin-bottom:4px}
+    .dashboard-item span{font-size:14px;color:#dbeafe}
+    .dashboard-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:15px}
+    .dashboard-mini{padding:16px;border-radius:15px;background:rgba(255,255,255,.09)}
+    .dashboard-mini strong{display:block;font-size:22px}
+    .dashboard-mini span{font-size:12px;color:#bfdbfe}
+    section{padding:82px 0}
+    .section-head{max-width:760px;margin-bottom:38px}
+    .section-head h2{font-size:clamp(32px,4vw,48px);line-height:1.08;margin:0 0 14px;color:var(--navy);letter-spacing:-.03em}
+    .section-head p{font-size:18px;color:var(--muted);margin:0}
+    .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+    .card{padding:28px;border:1px solid var(--line);border-radius:18px;background:#fff;box-shadow:0 8px 30px rgba(16,42,67,.05)}
+    .icon{width:48px;height:48px;border-radius:14px;display:grid;place-items:center;background:#eaf1ff;color:var(--blue);font-weight:900;margin-bottom:18px}
+    .card h3{margin:0 0 9px;color:var(--navy);font-size:20px}
+    .card p{margin:0;color:var(--muted)}
+    .steps{counter-reset:step;display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+    .step{position:relative;padding:30px;border-radius:18px;background:var(--light)}
+    .step::before{
+      counter-increment:step;content:counter(step);width:40px;height:40px;border-radius:50%;
+      display:grid;place-items:center;background:var(--blue);color:white;font-weight:900;margin-bottom:18px
+    }
+    .pricing{background:var(--navy);color:white}
+    .pricing .section-head h2,.pricing .section-head p{color:white}
+    .pricing .section-head p{opacity:.74}
+    .price-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+    .price-card{padding:30px;border-radius:20px;background:#fff;color:var(--dark);position:relative}
+    .price-card.featured{transform:translateY(-10px);outline:3px solid var(--blue)}
+    .tag{position:absolute;top:16px;right:16px;background:#dbeafe;color:#1d4ed8;padding:6px 10px;border-radius:999px;font-weight:800;font-size:12px}
+    .price-card h3{font-size:24px;color:var(--navy);margin:0 0 8px}
+    .price{font-size:46px;font-weight:900;color:var(--navy);line-height:1;margin:18px 0}
+    .price small{font-size:15px;color:var(--muted);font-weight:600}
+    .features{padding:0;margin:22px 0;list-style:none}
+    .features li{margin:11px 0;color:#475569}
+    .features li::before{content:"✓";color:var(--green);font-weight:900;margin-right:9px}
+    .niche{background:#f8fafc}
+    .highlight{
+      display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center;
+      background:#fff;border:1px solid var(--line);border-radius:24px;padding:38px;box-shadow:var(--shadow)
+    }
+    .checklist{padding:0;list-style:none}
+    .checklist li{margin:12px 0}
+    .checklist li::before{content:"✓";color:var(--green);font-weight:900;margin-right:10px}
+    .faq details{border-bottom:1px solid var(--line);padding:18px 0}
+    .faq summary{cursor:pointer;font-weight:800;color:var(--navy);font-size:18px}
+    .faq p{color:var(--muted)}
+    .contact{background:linear-gradient(135deg,var(--blue),var(--navy));color:white}
+    .contact-grid{display:grid;grid-template-columns:.85fr 1.15fr;gap:42px;align-items:start}
+    .contact h2{font-size:44px;line-height:1.08;margin-top:0}
+    form{background:white;color:var(--dark);padding:28px;border-radius:20px}
+    .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+    label{display:block;font-size:13px;font-weight:800;color:var(--navy);margin-bottom:6px}
+    input,select,textarea{
+      width:100%;padding:13px 14px;border:1px solid var(--line);border-radius:10px;font:inherit;background:white
+    }
+    textarea{min-height:120px;resize:vertical}
+    .full{grid-column:1/-1}
+    .notice{font-size:12px;color:var(--muted);margin-top:12px}
+    footer{background:#081c2f;color:#dbe7f4;padding:30px 0}
+    .footer-row{display:flex;justify-content:space-between;gap:20px;align-items:center;flex-wrap:wrap}
+    @media(max-width:850px){
+      .nav-links{display:none}
+      .hero-grid,.highlight,.contact-grid{grid-template-columns:1fr}
+      .grid-3,.steps,.price-grid{grid-template-columns:1fr}
+      .hero-card img{height:auto}
+      .price-card.featured{transform:none}
+    }
+    @media(max-width:560px){
+      .form-grid{grid-template-columns:1fr}
+      .full{grid-column:auto}
+      .hero{padding-top:58px}
+      section{padding:62px 0}
+      .btn{width:100%}
+    }
+  </style>
+</head>
+<body>
+<header>
+  <div class="container nav">
+    <a class="brand" href="#inicio">
+      <span class="brand-mark">AO</span>
+      <span>AI OFFICE™</span>
+    </a>
+    <nav class="nav-links">
+      <a href="#servicos">Serviços</a>
+      <a href="#como-funciona">Como funciona</a>
+      <a href="#precos">Preços</a>
+      <a href="#faq">FAQ</a>
+      <a class="btn btn-primary" href="#contacto">Pedir proposta</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+<section class="hero" id="inicio">
+  <div class="container hero-grid">
+    <div>
+      <span class="eyebrow">O escritório digital da sua empresa</span>
+      <h1>Trabalhe melhor.<br>Ganhe tempo.<br>Cresça com organização.</h1>
+      <p class="lead">A AI Office™ cria documentos, mensagens, processos e ferramentas de inteligência artificial personalizados para o seu negócio, totalmente online e prontos a utilizar.</p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="#contacto">Receber proposta</a>
+        <a class="btn btn-secondary" href="#servicos">Conhecer serviços</a>
+      </div>
+      <div class="trust">
+        <span>Serviço remoto</span>
+        <span>Sem reuniões obrigatórias</span>
+        <span>Entrega em 2 a 5 dias úteis</span>
+      </div>
+    </div>
+    <div class="hero-card" aria-label="Visão geral do escritório digital">
+      <div class="dashboard-head">
+        <strong>AI Office™</strong>
+        <span class="dashboard-status"><span class="dashboard-dot"></span> Sistema digital</span>
+      </div>
+      <div class="dashboard-item">
+        <strong>Documentos e processos</strong>
+        <span>Modelos, checklists, propostas e manuais organizados.</span>
+      </div>
+      <div class="dashboard-item">
+        <strong>Comunicação profissional</strong>
+        <span>Email, WhatsApp Business e respostas a clientes.</span>
+      </div>
+      <div class="dashboard-item">
+        <strong>Inteligência artificial aplicada</strong>
+        <span>Prompts e fluxos personalizados para tarefas reais.</span>
+      </div>
+      <div class="dashboard-grid">
+        <div class="dashboard-mini"><strong>100%</strong><span>serviço online</span></div>
+        <div class="dashboard-mini"><strong>2–5</strong><span>dias úteis</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="servicos">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow">Serviços</span>
+      <h2>Tudo o que a sua empresa precisa para trabalhar com mais eficiência.</h2>
+      <p>Escolha um serviço específico ou receba um escritório digital completo.</p>
+    </div>
+    <div class="grid-3">
+      <article class="card"><div class="icon">✉</div><h3>Email profissional</h3><p>Modelos de resposta, assinaturas, organização e mensagens prontas.</p></article>
+      <article class="card"><div class="icon">WA</div><h3>WhatsApp Business</h3><p>Boas-vindas, ausência, perguntas frequentes, vendas e atendimento.</p></article>
+      <article class="card"><div class="icon">DOC</div><h3>Documentos</h3><p>Propostas, orçamentos, relatórios, checklists, manuais e procedimentos.</p></article>
+      <article class="card"><div class="icon">IA</div><h3>Inteligência artificial</h3><p>Prompts personalizados, bibliotecas internas e guias simples de utilização.</p></article>
+      <article class="card"><div class="icon">MKT</div><h3>Marketing</h3><p>Calendários de conteúdo, publicações, campanhas e descrições comerciais.</p></article>
+      <article class="card"><div class="icon">ORG</div><h3>Organização digital</h3><p>Estrutura de pastas, ficheiros, nomenclaturas e processos internos.</p></article>
+    </div>
+  </div>
+</section>
+
+<section id="como-funciona" style="background:#f8fafc">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow">Processo simples</span>
+      <h2>Sem deslocações. Sem complicações.</h2>
+    </div>
+    <div class="steps">
+      <div class="step"><h3>Escolha o serviço</h3><p>Selecione o pacote mais adequado ao seu negócio.</p></div>
+      <div class="step"><h3>Preencha o formulário</h3><p>Envie as informações, documentos e preferências da empresa.</p></div>
+      <div class="step"><h3>Receba tudo pronto</h3><p>Entregamos os materiais organizados em formatos editáveis.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="niche">
+  <div class="container">
+    <div class="highlight">
+      <div>
+        <span class="eyebrow">Primeiro produto especializado</span>
+        <h2 style="font-size:42px;line-height:1.08;color:var(--navy);margin:0 0 16px">AI Office™ Imobiliárias</h2>
+        <p style="color:var(--muted);font-size:18px">Um sistema digital preparado para consultores e agências imobiliárias que querem responder mais depressa, comunicar melhor e manter o trabalho organizado.</p>
+        <a class="btn btn-primary" href="#contacto">Pedir versão para imobiliárias</a>
+      </div>
+      <ul class="checklist">
+        <li>Descrições profissionais de imóveis</li>
+        <li>Mensagens para compradores e proprietários</li>
+        <li>Modelos de acompanhamento de leads</li>
+        <li>Publicações para redes sociais</li>
+        <li>Checklists de angariação e visita</li>
+        <li>Biblioteca de prompts personalizada</li>
+        <li>Estrutura de organização documental</li>
+        <li>Manual de utilização</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="pricing" id="precos">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow" style="color:#93c5fd">Pacotes</span>
+      <h2>Comece com o essencial e evolua quando precisar.</h2>
+      <p>Pagamento único. Os materiais são adaptados ao negócio do cliente.</p>
+    </div>
+    <div class="price-grid">
+      <article class="price-card">
+        <h3>Starter</h3>
+        <p>Para profissionais independentes e pequenos negócios.</p>
+        <div class="price">199€ <small>pagamento único</small></div>
+        <ul class="features">
+          <li>20 modelos de email</li>
+          <li>30 respostas WhatsApp</li>
+          <li>50 prompts personalizados</li>
+          <li>Guia de utilização</li>
+        </ul>
+        <a class="btn btn-secondary" href="#contacto">Escolher Starter</a>
+      </article>
+      <article class="price-card featured">
+        <span class="tag">Mais escolhido</span>
+        <h3>Business</h3>
+        <p>Para empresas que precisam de um sistema mais completo.</p>
+        <div class="price">399€ <small>pagamento único</small></div>
+        <ul class="features">
+          <li>Tudo do Starter</li>
+          <li>Documentos e checklists</li>
+          <li>Organização digital</li>
+          <li>Calendário de conteúdo</li>
+        </ul>
+        <a class="btn btn-primary" href="#contacto">Escolher Business</a>
+      </article>
+      <article class="price-card">
+        <h3>Complete</h3>
+        <p>O escritório digital completo e personalizado.</p>
+        <div class="price">699€ <small>pagamento único</small></div>
+        <ul class="features">
+          <li>Tudo do Business</li>
+          <li>Procedimentos internos</li>
+          <li>Biblioteca avançada de IA</li>
+          <li>Entrega premium organizada</li>
+        </ul>
+        <a class="btn btn-secondary" href="#contacto">Escolher Complete</a>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="faq" id="faq">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow">Perguntas frequentes</span>
+      <h2>Informação clara antes de avançar.</h2>
+    </div>
+    <details open><summary>O serviço é totalmente remoto?</summary><p>Sim. O cliente preenche o formulário, envia os materiais e recebe a entrega online.</p></details>
+    <details><summary>Preciso de participar numa reunião?</summary><p>Não. As reuniões não são obrigatórias. O projeto pode ser realizado integralmente através do formulário e de mensagens escritas.</p></details>
+    <details><summary>Quanto tempo demora?</summary><p>A maioria dos projetos é entregue entre 2 e 5 dias úteis, dependendo do pacote e da quantidade de personalização.</p></details>
+    <details><summary>Os documentos podem ser editados?</summary><p>Sim. A entrega pode incluir PDF, Word, Excel e outros formatos adequados ao serviço contratado.</p></details>
+    <details><summary>A AI Office substitui os meus programas atuais?</summary><p>Não necessariamente. Criamos materiais e processos que podem complementar as ferramentas que a empresa já utiliza.</p></details>
+  </div>
+</section>
+
+<section class="contact" id="contacto">
+  <div class="container contact-grid">
+    <div>
+      <span class="eyebrow" style="color:#bfdbfe">Pedido de proposta</span>
+      <h2>Conte-nos o que precisa de organizar.</h2>
+      <p>Preencha o formulário. A informação ficará preparada para ligação futura a um formulário real ou base de dados.</p>
+    </div>
+    <form id="leadForm">
+      <div class="form-grid">
+        <div><label for="nome">Nome</label><input id="nome" name="nome" required></div>
+        <div><label for="empresa">Empresa</label><input id="empresa" name="empresa" required></div>
+        <div><label for="email">E-mail</label><input id="email" name="email" type="email" required></div>
+        <div><label for="setor">Setor</label>
+          <select id="setor" name="setor">
+            <option>Imobiliário</option><option>Restauração</option><option>Clínica</option>
+            <option>Contabilidade</option><option>Advocacia</option><option>Comércio</option><option>Outro</option>
+          </select>
+        </div>
+        <div><label for="pacote">Pacote</label>
+          <select id="pacote" name="pacote"><option>Starter — 199€</option><option>Business — 399€</option><option>Complete — 699€</option></select>
+        </div>
+        <div><label for="contactoPreferido">Contacto preferido</label>
+          <select id="contactoPreferido"><option>E-mail</option><option>WhatsApp</option></select>
+        </div>
+        <div class="full"><label for="mensagem">O que pretende melhorar?</label><textarea id="mensagem" name="mensagem" placeholder="Ex.: respostas a clientes, documentos, organização, marketing..."></textarea></div>
+        <div class="full"><button class="btn btn-primary" type="submit" style="width:100%">Preparar pedido</button></div>
+      </div>
+      <p class="notice">Versão HTML de demonstração: nenhum dado é enviado ou guardado nesta fase.</p>
+    </form>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="container footer-row">
+    <strong>AI OFFICE™</strong>
+    <span>O escritório digital da sua empresa.</span>
+    <span>© 2026 AI Office™</span>
+  </div>
+</footer>
+
+<script>
+document.getElementById('leadForm').addEventListener('submit', function(e){
+  e.preventDefault();
+  const nome = document.getElementById('nome').value;
+  const empresa = document.getElementById('empresa').value;
+  const pacote = document.getElementById('pacote').value;
+  alert(`Pedido preparado com sucesso!\n\nNome: ${nome}\nEmpresa: ${empresa}\nPacote: ${pacote}\n\nNa versão publicada, este pedido será ligado ao sistema escolhido pela AI Office™.`);
+});
+</script>
+</body>
+</html>

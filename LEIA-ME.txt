@@ -1,0 +1,14 @@
+AI Office™ — Premium V3
+
+Inclui:
+• Página principal autónoma, sem imagem em falta
+• Formulário preparado para Netlify Forms
+• Proteção antisspam honeypot
+• Página de confirmação obrigado.html
+• Cabeçalhos básicos de segurança
+
+PUBLICAÇÃO RECOMENDADA:
+1. Extraia o ZIP.
+2. Arraste a pasta para o Netlify Drop ou publique através do Netlify.
+3. Após a publicação, faça um envio de teste.
+4. Os pedidos aparecerão na área Forms do projeto Netlify.
