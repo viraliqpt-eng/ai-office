@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="pt-PT">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex"><title>Área de Cliente | AI Office™</title>
+<link rel="icon" href="assets/favicon.svg"><link rel="stylesheet" href="css/cliente.css">
+</head>
+<body>
+<aside id="side">
+<a class="brand" href="index.html"><img src="assets/logo.svg" width="42"><b>AI OFFICE™</b></a>
+<nav>
+<button class="active" data-page="inicio">⌂ Início</button>
+<button data-page="pedidos">▤ Pedidos</button>
+<button data-page="documentos">▣ Documentos</button>
+<button data-page="mensagens">✉ Mensagens</button>
+<button data-page="perfil">◎ Perfil</button>
+</nav>
+<div class="bottom"><a href="index.html">← Voltar ao website</a><small>Protótipo de demonstração</small></div>
+</aside>
+
+<main>
+<header><button id="menu">☰</button><div><small>ÁREA DE CLIENTE</small><h1 id="title">Início</h1></div><div class="user"><span><b>João Silva</b><small>Silva Imobiliária</small></span><i>JS</i></div></header>
+
+<section id="inicio" class="page active">
+<div class="note"><b>Modo demonstração</b><span>Sem autenticação ou base de dados real.</span></div>
+<div class="hero"><div><small>BEM-VINDO</small><h2>O seu escritório digital está em andamento.</h2><p>Acompanhe pedidos, documentos e mensagens num único lugar.</p></div><a href="#novo">Novo pedido</a></div>
+
+<div class="cols">
+<article class="panel">
+<div class="head"><div><small>PEDIDO ATUAL</small><h2>AO-2026-0007</h2></div><em>Em produção</em></div>
+<div class="meta"><div><span>Serviço</span><b>Business</b></div><div><span>Responsável</span><b>AI Office™</b></div><div><span>Entrega</span><b>24 julho</b></div></div>
+<div class="prog"><div><span>Progresso</span><b>70%</b></div><i><u></u></i></div>
+<ol>
+<li class="done"><i>✓</i><span><b>Pedido recebido</b><small>22 julho, 19:15</small></span></li>
+<li class="done"><i>✓</i><span><b>Em análise</b><small>22 julho, 19:40</small></span></li>
+<li class="now"><i>3</i><span><b>Em produção</b><small>Trabalho em curso</small></span></li>
+<li><i>4</i><span><b>Revisão</b><small>A aguardar</small></span></li>
+<li><i>5</i><span><b>Concluído</b><small>A aguardar</small></span></li>
+</ol>
+</article>
+
+<article class="panel">
+<div class="head"><div><small>FICHEIROS</small><h2>Documentos recentes</h2></div><button data-open="documentos">Ver todos</button></div>
+<div class="files">
+<div><i>PDF</i><span><b>Proposta comercial</b><small>1,2 MB</small></span><button>Descarregar</button></div>
+<div><i>DOC</i><span><b>Modelos de email</b><small>620 KB</small></span><button>Descarregar</button></div>
+<div><i>XLS</i><span><b>Checklist</b><small>340 KB</small></span><button>Descarregar</button></div>
+</div>
+</article>
+</div>
+
+<article class="panel" id="novo">
+<div class="head"><div><small>NOVO SERVIÇO</small><h2>Peça apoio adicional</h2></div></div>
+<form id="request">
+<label>Serviço<select name="servico"><option>Starter — 199€</option><option>Business — 399€</option><option>Complete — 699€</option></select></label>
+<label>Prioridade<select name="prioridade"><option>Normal</option><option>Urgente</option></select></label>
+<label class="full">Descrição<textarea required placeholder="Descreva o que precisa..."></textarea></label>
+<button class="primary full">Guardar pedido de demonstração</button>
+</form><p id="ok">Pedido guardado neste navegador.</p>
+</article>
+</section>
+
+<section id="pedidos" class="page"><article class="panel"><div class="head"><div><small>HISTÓRICO</small><h2>Os meus pedidos</h2></div></div>
+<div class="orders"><div><span><b>AO-2026-0007</b><small>Business</small></span><em>Em produção</em><b>399€</b></div><div><span><b>AO-2026-0003</b><small>Starter</small></span><em class="green">Concluído</em><b>199€</b></div></div>
+</article></section>
+
+<section id="documentos" class="page"><article class="panel"><div class="head"><div><small>BIBLIOTECA</small><h2>Os meus documentos</h2></div><button class="primary">Enviar ficheiro</button></div>
+<div class="docs"><div><i>PDF</i><h3>Proposta comercial</h3><p>Atualizado hoje</p></div><div><i>DOC</i><h3>Modelos de email</h3><p>Atualizado hoje</p></div><div><i>XLS</i><h3>Checklist</h3><p>Atualizado ontem</p></div></div>
+</article></section>
+
+<section id="mensagens" class="page"><article class="panel"><div class="head"><div><small>COMUNICAÇÃO</small><h2>Mensagens</h2></div></div>
+<div id="chat"><div class="received"><b>AI Office™</b><p>O seu pedido já está em produção.</p><small>18:40</small></div><div class="sent"><b>João Silva</b><p>Obrigado. Gostaria de incluir respostas para proprietários.</p><small>18:52</small></div></div>
+<form id="chatForm" class="chatForm"><input id="chatInput" required placeholder="Escreva uma mensagem..."><button class="primary">Enviar</button></form>
+</article></section>
+
+<section id="perfil" class="page"><article class="panel"><div class="head"><div><small>CONTA</small><h2>Perfil da empresa</h2></div></div>
+<form id="profile"><label>Nome<input value="João Silva"></label><label>Empresa<input value="Silva Imobiliária, Lda."></label><label>Email<input value="joao@example.com"></label><label>Telefone<input value="+351 912 345 678"></label><button class="primary full">Guardar alterações</button></form>
+</article></section>
+</main>
+<script src="js/cliente.js"></script>
+</body></html>

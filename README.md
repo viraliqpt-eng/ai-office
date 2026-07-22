@@ -13,3 +13,7 @@ O formulário usa Netlify Forms e chama-se `pedido-proposta`. Depois de publicar
 Aceda a `/admin.html`.
 
 Este painel é um protótipo sem autenticação e utiliza `localStorage`. Não deve ser usado para guardar dados reais ou confidenciais.
+
+
+## Área de cliente
+Aceda a `/cliente.html`. Protótipo sem autenticação ou base de dados real.
