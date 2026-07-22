@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex">
+  <meta name="theme-color" content="#102A43">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/admin.css">
+  <title>Painel Administrativo | AI Office™</title>
+</head>
+<body>
+  <aside class="sidebar" id="sidebar">
+    <a class="admin-brand" href="index.html">
+      <img src="assets/logo.svg" width="42" height="42" alt="">
+      <span>AI OFFICE™</span>
+    </a>
+
+    <nav>
+      <button class="nav-item active" data-view="dashboard">▦ <span>Dashboard</span></button>
+      <button class="nav-item" data-view="pedidos">▤ <span>Pedidos</span></button>
+      <button class="nav-item" data-view="clientes">◎ <span>Clientes</span></button>
+      <button class="nav-item" data-view="servicos">◇ <span>Serviços</span></button>
+      <button class="nav-item" data-view="documentos">▣ <span>Documentos</span></button>
+      <button class="nav-item" data-view="agentes">✦ <span>Agentes IA</span></button>
+    </nav>
+
+    <div class="sidebar-bottom">
+      <a href="index.html">← Voltar ao website</a>
+      <small>Protótipo administrativo</small>
+    </div>
+  </aside>
+
+  <main class="admin-main">
+    <header class="topbar">
+      <button class="mobile-toggle" id="mobileToggle" aria-label="Abrir menu">☰</button>
+      <div>
+        <p class="kicker">AI Office™</p>
+        <h1 id="pageTitle">Dashboard</h1>
+      </div>
+      <div class="admin-user">
+        <span>Pedro Figueiredo</span>
+        <div class="avatar">PF</div>
+      </div>
+    </header>
+
+    <section class="view active" id="dashboard">
+      <div class="notice">
+        <strong>Modo demonstração</strong>
+        <span>Os dados abaixo são fictícios e ficam guardados apenas neste navegador.</span>
+      </div>
+
+      <div class="stats-grid">
+        <article><span>Pedidos novos</span><strong id="statNew">0</strong><small>Por analisar</small></article>
+        <article><span>Em produção</span><strong id="statProgress">0</strong><small>Trabalho em curso</small></article>
+        <article><span>Clientes</span><strong id="statClients">0</strong><small>Registos de demonstração</small></article>
+        <article><span>Valor potencial</span><strong id="statValue">0€</strong><small>Total dos pedidos</small></article>
+      </div>
+
+      <div class="dashboard-grid">
+        <section class="panel">
+          <div class="panel-head">
+            <div><span class="kicker">Atividade</span><h2>Pedidos recentes</h2></div>
+            <button class="text-button" data-go="pedidos">Ver todos</button>
+          </div>
+          <div id="recentOrders"></div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-head"><div><span class="kicker">Resumo</span><h2>Estado dos pedidos</h2></div></div>
+          <div id="statusSummary" class="status-summary"></div>
+        </section>
+      </div>
+    </section>
+
+    <section class="view" id="pedidos">
+      <div class="toolbar">
+        <input id="orderSearch" type="search" placeholder="Pesquisar por cliente, empresa ou número...">
+        <select id="statusFilter">
+          <option value="">Todos os estados</option>
+          <option>Novo</option>
+          <option>Em análise</option>
+          <option>Em produção</option>
+          <option>Entregue</option>
+          <option>Concluído</option>
+        </select>
+        <button class="primary-button" id="newOrderButton">+ Novo pedido</button>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Número</th><th>Cliente</th><th>Serviço</th><th>Valor</th><th>Estado</th><th>Ação</th></tr></thead>
+          <tbody id="ordersTable"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="view" id="clientes">
+      <div class="panel">
+        <div class="panel-head"><div><span class="kicker">CRM</span><h2>Clientes</h2></div></div>
+        <div id="clientsGrid" class="clients-grid"></div>
+      </div>
+    </section>
+
+    <section class="view" id="servicos">
+      <div class="service-grid">
+        <article><span>STARTER</span><h2>199€</h2><p>Email, WhatsApp e biblioteca de prompts.</p></article>
+        <article class="featured"><span>BUSINESS</span><h2>399€</h2><p>Documentos, organização e calendário de conteúdo.</p></article>
+        <article><span>COMPLETE</span><h2>699€</h2><p>Escritório digital completo e personalizado.</p></article>
+      </div>
+    </section>
+
+    <section class="view" id="documentos">
+      <div class="empty-state">
+        <div>▣</div>
+        <h2>Biblioteca de documentos</h2>
+        <p>Numa fase futura, esta área permitirá guardar propostas, checklists, manuais e entregas dos clientes.</p>
+      </div>
+    </section>
+
+    <section class="view" id="agentes">
+      <div class="agent-grid">
+        <article><div>🏠</div><h3>Imobiliárias</h3><p>Descrições, mensagens, angariação e acompanhamento.</p><span>Planeado</span></article>
+        <article><div>🍽️</div><h3>Restaurantes</h3><p>Menus, respostas, reservas e conteúdos digitais.</p><span>Planeado</span></article>
+        <article><div>⚖️</div><h3>Advogados</h3><p>Organização, modelos e comunicação administrativa.</p><span>Planeado</span></article>
+        <article><div>📊</div><h3>Contabilistas</h3><p>Checklists, pedidos de documentos e comunicação.</p><span>Planeado</span></article>
+      </div>
+    </section>
+  </main>
+
+  <dialog id="orderDialog">
+    <form method="dialog" id="orderForm">
+      <div class="dialog-head">
+        <h2>Novo pedido</h2>
+        <button value="cancel" aria-label="Fechar">×</button>
+      </div>
+      <div class="form-grid">
+        <label>Nome do cliente<input name="client" required></label>
+        <label>Empresa<input name="company" required></label>
+        <label>Email<input name="email" type="email" required></label>
+        <label>Serviço
+          <select name="service">
+            <option>Starter</option>
+            <option>Business</option>
+            <option>Complete</option>
+            <option>AI Office Imobiliárias</option>
+          </select>
+        </label>
+        <label>Valor<input name="value" type="number" min="0" value="399" required></label>
+        <label>Estado
+          <select name="status">
+            <option>Novo</option>
+            <option>Em análise</option>
+            <option>Em produção</option>
+            <option>Entregue</option>
+            <option>Concluído</option>
+          </select>
+        </label>
+      </div>
+      <button class="primary-button full-button" type="submit">Guardar pedido</button>
+    </form>
+  </dialog>
+
+  <script src="js/admin.js"></script>
+</body>
+</html>
