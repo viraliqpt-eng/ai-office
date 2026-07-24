@@ -1,112 +1,25 @@
-const defaultOrders = [
-  {id:'AO-2026-0001',client:'João Silva',company:'Silva Imobiliária, Lda.',email:'joao@example.com',service:'Business',value:399,status:'Novo'},
-  {id:'AO-2026-0002',client:'Marta Costa',company:'Clínica Horizonte',email:'marta@example.com',service:'Complete',value:699,status:'Em análise'},
-  {id:'AO-2026-0003',client:'Ricardo Lopes',company:'Casa do Bairro',email:'ricardo@example.com',service:'Starter',value:199,status:'Em produção'},
-  {id:'AO-2026-0004',client:'Ana Ferreira',company:'Ferreira & Associados',email:'ana@example.com',service:'Business',value:399,status:'Entregue'}
-];
-
-let orders = JSON.parse(localStorage.getItem('aiOfficeOrders') || 'null') || defaultOrders;
-const views = document.querySelectorAll('.view');
-const navItems = document.querySelectorAll('.nav-item');
-const pageTitle = document.getElementById('pageTitle');
-
-const statusColors = {
-  'Novo':['#DBEAFE','#1D4ED8'],
-  'Em análise':['#FEF3C7','#B45309'],
-  'Em produção':['#EDE9FE','#6D28D9'],
-  'Entregue':['#DCFCE7','#15803D'],
-  'Concluído':['#E2E8F0','#334155']
-};
-
-function badge(status){
-  const colors=statusColors[status]||['#E2E8F0','#334155'];
-  return `<span class="badge" style="background:${colors[0]};color:${colors[1]}">${status}</span>`;
-}
-
-function save(){localStorage.setItem('aiOfficeOrders',JSON.stringify(orders));renderAll()}
-
-function showView(id){
-  views.forEach(v=>v.classList.toggle('active',v.id===id));
-  navItems.forEach(n=>n.classList.toggle('active',n.dataset.view===id));
-  const item=[...navItems].find(n=>n.dataset.view===id);
-  pageTitle.textContent=item?item.innerText.trim():'Dashboard';
-  document.getElementById('sidebar').classList.remove('open');
-}
-
-navItems.forEach(item=>item.addEventListener('click',()=>showView(item.dataset.view)));
-document.querySelectorAll('[data-go]').forEach(b=>b.addEventListener('click',()=>showView(b.dataset.go)));
-document.getElementById('mobileToggle').addEventListener('click',()=>document.getElementById('sidebar').classList.toggle('open'));
-
-function renderDashboard(){
-  document.getElementById('statNew').textContent=orders.filter(o=>o.status==='Novo').length;
-  document.getElementById('statProgress').textContent=orders.filter(o=>o.status==='Em produção').length;
-  document.getElementById('statClients').textContent=new Set(orders.map(o=>o.email)).size;
-  document.getElementById('statValue').textContent=orders.reduce((s,o)=>s+Number(o.value),0).toLocaleString('pt-PT')+'€';
-
-  document.getElementById('recentOrders').innerHTML=orders.slice(-4).reverse().map(o=>`
-    <div class="order-row">
-      <div><h3>${o.id} · ${o.client}</h3><p>${o.company} · ${o.service} · ${o.value}€</p></div>
-      ${badge(o.status)}
-    </div>`).join('');
-
-  const states=Object.keys(statusColors);
-  const max=Math.max(1,...states.map(s=>orders.filter(o=>o.status===s).length));
-  document.getElementById('statusSummary').innerHTML=states.map(s=>{
-    const count=orders.filter(o=>o.status===s).length;
-    return `<div class="summary-row"><span>${s}</span><div class="bar"><i style="width:${count/max*100}%"></i></div><strong>${count}</strong></div>`;
-  }).join('');
-}
-
-function renderOrders(){
-  const query=document.getElementById('orderSearch').value.toLowerCase();
-  const filter=document.getElementById('statusFilter').value;
-  const filtered=orders.filter(o=>(!filter||o.status===filter)&&(`${o.id} ${o.client} ${o.company}`.toLowerCase().includes(query)));
-  document.getElementById('ordersTable').innerHTML=filtered.map((o,index)=>`
-    <tr>
-      <td><strong>${o.id}</strong></td>
-      <td>${o.client}<br><small>${o.company}</small></td>
-      <td>${o.service}</td><td>${o.value}€</td><td>${badge(o.status)}</td>
-      <td><button class="table-action" onclick="advanceStatus('${o.id}')">Avançar estado</button></td>
-    </tr>`).join('') || '<tr><td colspan="6">Nenhum pedido encontrado.</td></tr>';
-}
-
-window.advanceStatus=function(id){
-  const flow=['Novo','Em análise','Em produção','Entregue','Concluído'];
-  const order=orders.find(o=>o.id===id);
-  if(!order)return;
-  order.status=flow[Math.min(flow.indexOf(order.status)+1,flow.length-1)];
-  save();
-};
-
-function renderClients(){
-  const map={};
-  orders.forEach(o=>{if(!map[o.email])map[o.email]={...o,count:0,total:0};map[o.email].count++;map[o.email].total+=Number(o.value)});
-  document.getElementById('clientsGrid').innerHTML=Object.values(map).map(c=>`
-    <article class="client-card"><h3>${c.client}</h3><p>${c.company}</p><p>${c.email}</p><p><strong>${c.count}</strong> pedido(s) · <strong>${c.total}€</strong></p></article>`).join('');
-}
-
-function renderAll(){renderDashboard();renderOrders();renderClients()}
-document.getElementById('orderSearch').addEventListener('input',renderOrders);
-document.getElementById('statusFilter').addEventListener('change',renderOrders);
-
-const dialog=document.getElementById('orderDialog');
-document.getElementById('newOrderButton').addEventListener('click',()=>dialog.showModal());
-document.getElementById('orderForm').addEventListener('submit',event=>{
-  event.preventDefault();
-  const data=new FormData(event.target);
-  const next=String(orders.length+1).padStart(4,'0');
-  orders.push({
-    id:`AO-2026-${next}`,
-    client:data.get('client'),
-    company:data.get('company'),
-    email:data.get('email'),
-    service:data.get('service'),
-    value:Number(data.get('value')),
-    status:data.get('status')
-  });
-  event.target.reset();
-  dialog.close();
-  save();
-});
-
-renderAll();
+let adminData={clients:[],orders:[],messages:[]};
+const views=document.querySelectorAll('.view'),navItems=document.querySelectorAll('.nav-item'),pageTitle=document.getElementById('pageTitle');
+const colors={'Novo':['#DBEAFE','#1D4ED8'],'Em análise':['#FEF3C7','#B45309'],'Em produção':['#EDE9FE','#6D28D9'],'Revisão':['#FCE7F3','#BE185D'],'Entregue':['#DCFCE7','#15803D'],'Concluído':['#E2E8F0','#334155']};
+const prog={'Novo':10,'Em análise':30,'Em produção':70,'Revisão':90,'Entregue':95,'Concluído':100};
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));
+const badge=s=>{const c=colors[s]||colors['Concluído'];return `<span class="badge" style="background:${c[0]};color:${c[1]}">${esc(s)}</span>`};
+const client=id=>adminData.clients.find(c=>c.id===id)||{};
+function showView(id){views.forEach(v=>v.classList.toggle('active',v.id===id));navItems.forEach(n=>n.classList.toggle('active',n.dataset.view===id));const i=[...navItems].find(n=>n.dataset.view===id);pageTitle.textContent=i?i.innerText.trim():'Dashboard';document.getElementById('sidebar').classList.remove('open')}
+navItems.forEach(i=>i.onclick=()=>showView(i.dataset.view));document.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>showView(b.dataset.go));document.getElementById('mobileToggle').onclick=()=>document.getElementById('sidebar').classList.toggle('open');
+function renderDashboard(){const o=adminData.orders;document.getElementById('statNew').textContent=o.filter(x=>x.status==='Novo').length;document.getElementById('statProgress').textContent=o.filter(x=>x.status==='Em produção').length;document.getElementById('statClients').textContent=adminData.clients.length;document.getElementById('statValue').textContent=o.reduce((s,x)=>s+Number(x.value_eur||0),0).toLocaleString('pt-PT')+'€';
+document.getElementById('recentOrders').innerHTML=o.slice(0,4).map(x=>{const c=client(x.client_id);return `<div class="order-row"><div><h3>${esc(x.order_number)} · ${esc(c.full_name||'Cliente')}</h3><p>${esc(c.company_name||'')} · ${esc(x.service_name)} · ${Number(x.value_eur||0)}€</p></div>${badge(x.status)}</div>`}).join('');
+const states=Object.keys(colors),mx=Math.max(1,...states.map(s=>o.filter(x=>x.status===s).length));document.getElementById('statusSummary').innerHTML=states.map(s=>{const n=o.filter(x=>x.status===s).length;return `<div class="summary-row"><span>${s}</span><div class="bar"><i style="width:${n/mx*100}%"></i></div><strong>${n}</strong></div>`}).join('')}
+function renderOrders(){const q=document.getElementById('orderSearch').value.toLowerCase(),f=document.getElementById('statusFilter').value;const list=adminData.orders.filter(o=>{const c=client(o.client_id),h=`${o.order_number} ${c.full_name||''} ${c.company_name||''}`.toLowerCase();return(!f||o.status===f)&&h.includes(q)});document.getElementById('ordersTable').innerHTML=list.map(o=>{const c=client(o.client_id);return `<tr><td><strong>${esc(o.order_number)}</strong></td><td>${esc(c.full_name||'Cliente')}<br><small>${esc(c.company_name||'')}</small></td><td>${esc(o.service_name)}</td><td>${Number(o.value_eur||0)}€</td><td>${badge(o.status)}</td><td><button class="table-action" onclick="advanceStatus('${o.id}')">Avançar estado</button></td></tr>`}).join('')||'<tr><td colspan="6">Nenhum pedido encontrado.</td></tr>'}
+window.advanceStatus=async id=>{const flow=['Novo','Em análise','Em produção','Revisão','Entregue','Concluído'],o=adminData.orders.find(x=>x.id===id),n=flow[Math.min(Math.max(0,flow.indexOf(o.status))+1,flow.length-1)];await adminUpdateOrder(id,{status:n,progress:prog[n]});await load()};
+function renderClients(){document.getElementById('clientsGrid').innerHTML=adminData.clients.map(c=>{const o=adminData.orders.filter(x=>x.client_id===c.id),t=o.reduce((s,x)=>s+Number(x.value_eur||0),0);return `<article class="client-card"><h3>${esc(c.full_name)}</h3><p>${esc(c.company_name||'')}</p><p>${esc(c.email||c.phone||'')}</p><p><strong>${o.length}</strong> pedido(s) · <strong>${t}€</strong></p></article>`}).join('')}
+function renderMessages(){const x=document.getElementById('adminMessages');x.innerHTML=adminData.messages.map(m=>{const c=client(m.client_id);return `<article class="admin-message ${m.is_read?'':'unread'}"><div><strong>${esc(c.full_name||'Cliente')}</strong><small>${new Date(m.created_at).toLocaleString('pt-PT')}</small></div><p>${esc(m.body)}</p>${m.is_read?'<span>Lida</span>':`<button onclick="markMessageRead('${m.id}')">Marcar como lida</button>`}</article>`}).join('')||'<p>Sem mensagens.</p>'}
+window.markMessageRead=async id=>{await adminMarkMessageRead(id);await load()};
+function selectClients(){const s=document.querySelector('#orderForm [name="client_id"]');s.innerHTML=adminData.clients.map(c=>`<option value="${c.id}">${esc(c.full_name)} — ${esc(c.company_name||'')}</option>`).join('')}
+function render(){renderDashboard();renderOrders();renderClients();renderMessages();selectClients()}
+async function load(){adminData=await adminFetchData();render()}
+document.getElementById('orderSearch').oninput=renderOrders;document.getElementById('statusFilter').onchange=renderOrders;
+const dialog=document.getElementById('orderDialog');document.getElementById('newOrderButton').onclick=()=>dialog.showModal();
+document.getElementById('orderForm').onsubmit=async e=>{e.preventDefault();const d=new FormData(e.target),s=d.get('status');await adminCreateOrder({client_id:d.get('client_id'),service_name:d.get('service'),value_eur:Number(d.get('value')),status:s,progress:prog[s],priority:'Normal'});e.target.reset();dialog.close();await load()};
+document.getElementById('adminLogout').onclick=adminLogout;
+(async()=>{const p=await requireAdmin();if(!p)return;document.getElementById('adminName').textContent=p.full_name||'Administrador';if(aiOfficeSupabase){document.getElementById('adminModeLabel').textContent='Ligado ao Supabase';document.getElementById('adminModeText').textContent='Dados carregados da base de dados.'}await load()})();

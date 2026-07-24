@@ -21,7 +21,7 @@
       <button class="nav-item" data-view="pedidos">▤ <span>Pedidos</span></button>
       <button class="nav-item" data-view="clientes">◎ <span>Clientes</span></button>
       <button class="nav-item" data-view="servicos">◇ <span>Serviços</span></button>
-      <button class="nav-item" data-view="documentos">▣ <span>Documentos</span></button>
+      <button class="nav-item" data-view="documentos">▣ <span>Documentos</span></button><button class="nav-item" data-view="mensagens">✉ <span>Mensagens</span></button>
       <button class="nav-item" data-view="agentes">✦ <span>Agentes IA</span></button>
     </nav>
 
@@ -39,15 +39,15 @@
         <h1 id="pageTitle">Dashboard</h1>
       </div>
       <div class="admin-user">
-        <span>Pedro Figueiredo</span>
+        <span id="adminName">Pedro Figueiredo</span><button class="logout-admin" id="adminLogout">Sair</button>
         <div class="avatar">PF</div>
       </div>
     </header>
 
     <section class="view active" id="dashboard">
       <div class="notice">
-        <strong>Modo demonstração</strong>
-        <span>Os dados abaixo são fictícios e ficam guardados apenas neste navegador.</span>
+        <strong id="adminModeLabel">Modo demonstração</strong>
+        <span><span id="adminModeText">Os dados ficam guardados apenas neste navegador até o Supabase ser ativado.</span></span>
       </div>
 
       <div class="stats-grid">
@@ -117,7 +117,7 @@
       </div>
     </section>
 
-    <section class="view" id="agentes">
+    <section class="view" id="mensagens"><div class="panel"><div class="panel-head"><div><span class="kicker">Caixa de entrada</span><h2>Mensagens dos clientes</h2></div></div><div id="adminMessages" class="admin-messages"></div></div></section><section class="view" id="agentes">
       <div class="agent-grid">
         <article><div>🏠</div><h3>Imobiliárias</h3><p>Descrições, mensagens, angariação e acompanhamento.</p><span>Planeado</span></article>
         <article><div>🍽️</div><h3>Restaurantes</h3><p>Menus, respostas, reservas e conteúdos digitais.</p><span>Planeado</span></article>
@@ -134,9 +134,7 @@
         <button value="cancel" aria-label="Fechar">×</button>
       </div>
       <div class="form-grid">
-        <label>Nome do cliente<input name="client" required></label>
-        <label>Empresa<input name="company" required></label>
-        <label>Email<input name="email" type="email" required></label>
+        <label class="full-field">Cliente<select name="client_id" required></select></label>
         <label>Serviço
           <select name="service">
             <option>Starter</option>
@@ -160,6 +158,6 @@
     </form>
   </dialog>
 
-  <script src="js/admin.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="js/config.js"></script><script src="js/supabase-client.js"></script><script src="js/admin-auth.js"></script><script src="js/admin-database.js"></script><script src="js/admin.js"></script>
 </body>
 </html>

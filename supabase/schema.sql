@@ -145,3 +145,15 @@ with check (
   bucket_id = 'client-documents'
   and auth.uid()::text = (storage.foldername(name))[1]
 );
+
+create or replace function public.is_admin() returns boolean language sql stable security definer set search_path=public as $$select exists(select 1 from public.profiles where id=auth.uid() and role='admin');$$;
+create policy "Admins view profiles" on public.profiles for select using(public.is_admin());
+create policy "Admins update profiles" on public.profiles for update using(public.is_admin());
+create policy "Admins view orders" on public.orders for select using(public.is_admin());
+create policy "Admins create orders" on public.orders for insert with check(public.is_admin());
+create policy "Admins update orders" on public.orders for update using(public.is_admin());
+create policy "Admins view documents" on public.documents for select using(public.is_admin());
+create policy "Admins create documents" on public.documents for insert with check(public.is_admin());
+create policy "Admins view messages" on public.messages for select using(public.is_admin());
+create policy "Admins create messages" on public.messages for insert with check(public.is_admin());
+create policy "Admins update messages" on public.messages for update using(public.is_admin());

@@ -17,3 +17,12 @@
    - `role`
 
 Nunca colocar a service_role key no frontend.
+
+## Primeiro administrador
+Depois de criar o utilizador, execute:
+```sql
+update public.profiles set role='admin', full_name='Pedro Figueiredo'
+where id=(select id from auth.users where email='SEU_EMAIL_ADMIN');
+```
+Acesso: `/admin-login.html`
+Demonstração: `admin@aioffice.pt` / `admin2026`

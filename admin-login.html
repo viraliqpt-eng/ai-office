@@ -1,0 +1,16 @@
+<!doctype html><html lang="pt-PT"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex"><title>Administração | AI Office™</title>
+<link rel="icon" href="assets/favicon.svg"><link rel="stylesheet" href="css/login.css"></head><body>
+<main class="login-shell">
+<section class="login-panel brand-panel"><a class="brand" href="index.html"><img src="assets/logo.svg" width="48"><span>AI OFFICE™</span></a>
+<div class="brand-copy"><span class="eyebrow">Administração</span><h1>Controlo completo da operação.</h1><p>Clientes, pedidos, mensagens e estados num painel central.</p></div></section>
+<section class="login-panel form-panel"><div class="form-wrap"><span class="eyebrow">Acesso reservado</span><h2>Entrar como administrador</h2>
+<div class="demo-box"><strong>Demonstração</strong><span>Email: admin@aioffice.pt</span><span>Palavra-passe: admin2026</span></div>
+<form id="adminLoginForm"><label>Email</label><input id="adminEmail" type="email" required>
+<label>Palavra-passe</label><div class="password-field"><input id="adminPassword" type="password" required><button id="toggleAdminPassword" type="button">Mostrar</button></div>
+<button class="login-button">Entrar no painel</button><p class="error" id="adminLoginError"></p></form>
+<p class="back-link"><a href="index.html">← Voltar ao website</a></p></div></section></main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/config.js"></script><script src="js/supabase-client.js"></script><script src="js/admin-auth.js"></script>
+</body></html>
