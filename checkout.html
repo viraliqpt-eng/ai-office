@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="pt-PT">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Escolha o seu plano AI Office™ e conclua o pedido.">
+<meta name="theme-color" content="#102A43">
+<link rel="icon" href="assets/favicon.svg">
+<link rel="stylesheet" href="css/checkout.css">
+<title>Planos e Pagamento | AI Office™</title>
+</head>
+<body>
+<header class="checkout-header">
+  <a href="index.html" class="checkout-brand">
+    <img src="assets/logo.svg" width="42" height="42" alt="">
+    <strong>AI OFFICE™</strong>
+  </a>
+  <div class="secure-label">🔒 Pagamento seguro</div>
+</header>
+
+<main class="checkout-main">
+  <section class="checkout-intro">
+    <span class="eyebrow">Começar agora</span>
+    <h1>Escolha a solução ideal para a sua empresa.</h1>
+    <p>Serviços únicos ou acompanhamento mensal. O pagamento real fica disponível assim que as chaves Stripe forem configuradas.</p>
+    <div class="billing-toggle">
+      <button class="active" data-billing="single">Serviço único</button>
+      <button data-billing="monthly">Mensal</button>
+    </div>
+  </section>
+
+  <section class="plans" id="plans">
+    <article class="plan" data-single-price="199" data-monthly-price="49" data-name="Starter">
+      <div>
+        <span class="plan-label">Para começar</span>
+        <h2>Starter</h2>
+        <p>Organização digital essencial para pequenos negócios.</p>
+      </div>
+      <div class="price"><strong>199€</strong><span>pagamento único</span></div>
+      <ul>
+        <li>1 serviço principal</li>
+        <li>Área de cliente</li>
+        <li>Documentos organizados</li>
+        <li>Suporte por mensagens</li>
+      </ul>
+      <button class="choose-plan">Escolher Starter</button>
+    </article>
+
+    <article class="plan featured" data-single-price="399" data-monthly-price="99" data-name="Business">
+      <span class="popular">Mais escolhido</span>
+      <div>
+        <span class="plan-label">Para crescer</span>
+        <h2>Business</h2>
+        <p>Mais automação, acompanhamento e produção.</p>
+      </div>
+      <div class="price"><strong>399€</strong><span>pagamento único</span></div>
+      <ul>
+        <li>Até 3 serviços</li>
+        <li>Prioridade de produção</li>
+        <li>Modelos personalizados</li>
+        <li>Relatório de progresso</li>
+      </ul>
+      <button class="choose-plan">Escolher Business</button>
+    </article>
+
+    <article class="plan" data-single-price="699" data-monthly-price="249" data-name="Complete">
+      <div>
+        <span class="plan-label">Operação completa</span>
+        <h2>Complete</h2>
+        <p>Estrutura digital completa para equipas exigentes.</p>
+      </div>
+      <div class="price"><strong>699€</strong><span>pagamento único</span></div>
+      <ul>
+        <li>Serviços completos</li>
+        <li>Prioridade máxima</li>
+        <li>Documentação avançada</li>
+        <li>Acompanhamento estratégico</li>
+      </ul>
+      <button class="choose-plan">Escolher Complete</button>
+    </article>
+  </section>
+
+  <section class="checkout-box" id="checkoutBox">
+    <div class="checkout-summary">
+      <span class="eyebrow">Resumo</span>
+      <h2 id="summaryPlan">Business</h2>
+      <div class="summary-row"><span>Modalidade</span><strong id="summaryBilling">Serviço único</strong></div>
+      <div class="summary-row"><span>Subtotal</span><strong id="summarySubtotal">399,00€</strong></div>
+      <div class="summary-row"><span>IVA</span><strong id="summaryVat">Incluído quando aplicável</strong></div>
+      <div class="summary-total"><span>Total</span><strong id="summaryTotal">399,00€</strong></div>
+    </div>
+
+    <form id="checkoutForm">
+      <h2>Dados do cliente</h2>
+      <div class="form-grid">
+        <label>Nome completo<input name="name" required></label>
+        <label>Empresa<input name="company" required></label>
+        <label>Email<input name="email" type="email" required></label>
+        <label>Telefone<input name="phone" required></label>
+        <label>NIF<input name="nif"></label>
+        <label>Setor
+          <select name="sector">
+            <option>Imobiliário</option>
+            <option>Saúde</option>
+            <option>Jurídico</option>
+            <option>Comércio</option>
+            <option>Serviços</option>
+            <option>Outro</option>
+          </select>
+        </label>
+        <label class="full">O que precisa?
+          <textarea name="description" required placeholder="Explique brevemente o objetivo do pedido..."></textarea>
+        </label>
+      </div>
+
+      <div class="payment-methods">
+        <span>Disponível através do Stripe:</span>
+        <div>Visa</div><div>Mastercard</div><div>Apple Pay</div><div>Google Pay</div><div>Multibanco</div>
+      </div>
+
+      <label class="terms">
+        <input type="checkbox" required>
+        <span>Li e aceito os termos do serviço e a política de privacidade.</span>
+      </label>
+
+      <button class="pay-button" type="submit" id="payButton">Continuar para pagamento</button>
+      <p class="checkout-message" id="checkoutMessage"></p>
+    </form>
+  </section>
+</main>
+
+<footer class="checkout-footer">
+  <span>© 2026 AI Office™</span>
+  <span>O escritório digital da sua empresa.</span>
+</footer>
+
+<script src="js/config.js"></script>
+<script src="js/checkout.js"></script>
+</body>
+</html>

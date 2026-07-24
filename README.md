@@ -41,3 +41,10 @@ Esta versão inclui:
 - modo demonstração de reserva
 
 Leia `SUPABASE_SETUP.md` antes de ativar a integração.
+
+## Fase 7 — Pagamentos e assinaturas
+
+Inclui checkout, planos únicos e mensais, função Netlify para Stripe Checkout,
+webhook, tabelas Supabase e páginas de sucesso/cancelamento.
+
+Leia `PAGAMENTOS_SETUP.md` antes de ativar pagamentos reais.
