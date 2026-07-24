@@ -48,3 +48,15 @@ Inclui checkout, planos únicos e mensais, função Netlify para Stripe Checkout
 webhook, tabelas Supabase e páginas de sucesso/cancelamento.
 
 Leia `PAGAMENTOS_SETUP.md` antes de ativar pagamentos reais.
+
+
+## Fase 8 — Stripe Price IDs
+
+Nesta versão:
+
+- os seis Price IDs de teste estão configurados
+- o checkout envia o Price ID real para a função Netlify
+- o servidor valida cada identificador
+- os valores deixaram de ser criados diretamente no código
+- os produtos e preços são carregados pelo Stripe Checkout
+- foram adicionados `.env.example` e `STRIPE_PRICE_IDS.md`

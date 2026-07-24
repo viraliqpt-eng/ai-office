@@ -42,9 +42,18 @@ document.querySelectorAll('.choose-plan').forEach(button=>button.addEventListene
 
 form.addEventListener('submit',async event=>{
   event.preventDefault();
+  const priceId = window.AI_OFFICE_CONFIG?.STRIPE_PRICES?.[billing]?.[selectedPlan];
+
+  if (!priceId) {
+    message.style.display='block';
+    message.textContent='O identificador Stripe deste plano não está configurado.';
+    return;
+  }
+
   const payload = {
     plan:selectedPlan,
     billing,
+    priceId,
     amount:selectedPrice,
     currency:'eur',
     customer:Object.fromEntries(new FormData(form))
