@@ -60,3 +60,13 @@ Nesta versão:
 - os valores deixaram de ser criados diretamente no código
 - os produtos e preços são carregados pelo Stripe Checkout
 - foram adicionados `.env.example` e `STRIPE_PRICE_IDS.md`
+
+
+## Fase 9 — Diagnóstico Stripe
+
+- mostra o erro real no checkout
+- valida o Price ID diretamente na Stripe
+- confirma a disponibilidade da chave e URL
+- reduz a sessão Stripe ao mínimo necessário
+- adiciona logs detalhados com request ID
+- inclui `DIAGNOSTICO_STRIPE.md`

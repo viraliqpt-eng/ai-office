@@ -69,20 +69,37 @@ form.addEventListener('submit',async event=>{
       body:JSON.stringify(payload)
     });
 
-    if(!response.ok) throw new Error('O serviço de pagamento ainda não está configurado.');
-    const data = await response.json();
+    let data = {};
+    try {
+      data = await response.json();
+    } catch (_) {
+      data = {};
+    }
+
+    if(!response.ok){
+      const details = data.details ? ` — ${data.details}` : '';
+      throw new Error((data.error || `Erro HTTP ${response.status}`) + details);
+    }
 
     if(data.url){
       window.location.href=data.url;
       return;
     }
 
-    throw new Error('Não foi recebida uma ligação de pagamento.');
+    throw new Error(data.error || 'Não foi recebida uma ligação de pagamento.');
   }catch(error){
+    console.error('AI Office Stripe checkout error:', error);
+
     const orders = JSON.parse(localStorage.getItem('aiOfficePendingPayments')||'[]');
-    orders.push({...payload,created_at:new Date().toISOString(),status:'A aguardar configuração Stripe'});
+    orders.push({
+      ...payload,
+      created_at:new Date().toISOString(),
+      status:'Erro Stripe',
+      error:error.message
+    });
     localStorage.setItem('aiOfficePendingPayments',JSON.stringify(orders));
-    message.textContent='Modo demonstração: pedido guardado. Configure o Stripe para aceitar pagamentos reais.';
+
+    message.textContent=`Erro no pagamento: ${error.message}`;
   }
 });
 
