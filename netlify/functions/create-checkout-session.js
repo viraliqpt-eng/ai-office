@@ -1,12 +1,12 @@
 const Stripe = require('stripe');
 
 const ALLOWED_PRICE_IDS = {
-  price_1TwmBIEB68OLK6IRuQLwGYwz: { plan: 'Starter', billing: 'monthly' },
-  price_1TwmDIEB68OLK6IRGCIH9tCc: { plan: 'Business', billing: 'monthly' },
-  price_1TwmEeEB68OLK6IRmVaNkBgk: { plan: 'Complete', billing: 'monthly' },
-  price_1TwmHQEB68OLK6IRzAG9JVTJ: { plan: 'Starter', billing: 'single' },
-  price_1TwmIMEB68OLK6IR31qXD6L7: { plan: 'Business', billing: 'single' },
-  price_1TwmJ3EB68OLK6IRrkIs9XLf: { plan: 'Complete', billing: 'single' }
+  price_1TwmBIEB680LK6IRuQLwGYwz: { plan: 'Starter', billing: 'monthly' },
+  price_1TwmDlEB680LK6IRGClH9tCc: { plan: 'Business', billing: 'monthly' },
+  price_1TwmEeEB680LK6IRmVaNkBgk: { plan: 'Complete', billing: 'monthly' },
+  price_1TwmHQEB680LK6IRzAG9JVTJ: { plan: 'Starter', billing: 'single' },
+  price_1TwmIMEB680LK6IR31qXD6L7: { plan: 'Business', billing: 'single' },
+  price_1TwmJ3EB680LK6IRrkIs9XLf: { plan: 'Complete', billing: 'single' }
 };
 
 function json(statusCode, payload) {

@@ -4,14 +4,14 @@ window.AI_OFFICE_CONFIG = {
 
   STRIPE_PRICES: {
     single: {
-      Starter: "price_1TwmHQEB68OLK6IRzAG9JVTJ",
-      Business: "price_1TwmIMEB68OLK6IR31qXD6L7",
-      Complete: "price_1TwmJ3EB68OLK6IRrkIs9XLf"
+      Starter: "price_1TwmHQEB680LK6IRzAG9JVTJ",
+      Business: "price_1TwmIMEB680LK6IR31qXD6L7",
+      Complete: "price_1TwmJ3EB680LK6IRrkIs9XLf"
     },
     monthly: {
-      Starter: "price_1TwmBIEB68OLK6IRuQLwGYwz",
-      Business: "price_1TwmDIEB68OLK6IRGCIH9tCc",
-      Complete: "price_1TwmEeEB68OLK6IRmVaNkBgk"
+      Starter: "price_1TwmBIEB680LK6IRuQLwGYwz",
+      Business: "price_1TwmDlEB680LK6IRGClH9tCc",
+      Complete: "price_1TwmEeEB680LK6IRmVaNkBgk"
     }
   },
   DEMO_MODE: true
