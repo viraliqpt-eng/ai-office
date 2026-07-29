@@ -14,3 +14,7 @@ if (aiOfficeSupabaseConfigured() && window.supabase) {
     window.AI_OFFICE_CONFIG.SUPABASE_ANON_KEY
   );
 }
+
+
+// Compatibilidade global utilizada pelo AI Office™ Intelligence.
+window.supabaseClient = aiOfficeSupabase;
