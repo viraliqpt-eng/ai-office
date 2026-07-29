@@ -73,9 +73,26 @@
     <section id="conversation" class="conversation" aria-live="polite"></section>
 
     <form id="form">
-      <textarea id="prompt" maxlength="4000" placeholder="Escreva o seu pedido..."></textarea>
-      <div>
-        <span id="count">0 / 4000</span>
+      <div id="attachmentPreview" class="attachment-preview" hidden>
+        <span id="attachmentName"></span>
+        <button id="removeAttachment" type="button" aria-label="Remover documento">×</button>
+      </div>
+
+      <textarea id="prompt" maxlength="4000" placeholder="Escreva o seu pedido ou anexe um documento..."></textarea>
+
+      <div class="composer-actions">
+        <div class="composer-left">
+          <label class="attach-button" for="fileInput" title="Anexar documento">
+            📎 Anexar
+          </label>
+          <input
+            id="fileInput"
+            type="file"
+            accept=".pdf,.txt,.csv,.json,.md,.doc,.docx,.rtf,.png,.jpg,.jpeg,.webp"
+            hidden
+          >
+          <span id="count">0 / 4000</span>
+        </div>
         <button id="sendButton" type="submit">Enviar ✦</button>
       </div>
     </form>

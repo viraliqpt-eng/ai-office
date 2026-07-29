@@ -2,9 +2,31 @@ const db = window.supabaseClient || window.aiOfficeSupabase || null;
 const profiles={general:'Assistente Geral',realestate:'Assistente Imobiliário',email:'Assistente de Email',documents:'Assistente de Documentos'};
 let currentAgent='general',currentConversationId=null,currentCustomerId=null,monthlyLimit=50;
 const form=document.getElementById('form'),promptInput=document.getElementById('prompt'),conversation=document.getElementById('conversation'),welcome=document.getElementById('welcome'),sendButton=document.getElementById('sendButton');
+const fileInput=document.getElementById('fileInput'),attachmentPreview=document.getElementById('attachmentPreview'),attachmentName=document.getElementById('attachmentName'),removeAttachment=document.getElementById('removeAttachment');
+let selectedAttachment=null;
 
 function addMessage(role,text){const el=document.createElement('article');el.className=`message ${role}`;el.textContent=text;conversation.appendChild(el);return el}
-function resetView(){currentConversationId=null;conversation.innerHTML='';conversation.classList.remove('active');document.body.classList.remove('chat-active');welcome.style.display='';promptInput.value='';document.getElementById('count').textContent='0 / 4000';document.querySelectorAll('.history-item').forEach(x=>x.classList.remove('active'))}
+function formatBytes(bytes){
+  if(bytes<1024)return `${bytes} B`;
+  if(bytes<1024*1024)return `${(bytes/1024).toFixed(1)} KB`;
+  return `${(bytes/(1024*1024)).toFixed(1)} MB`;
+}
+function clearAttachment(){
+  selectedAttachment=null;
+  fileInput.value='';
+  attachmentPreview.hidden=true;
+  attachmentName.textContent='';
+}
+function readFileAsBase64(file){
+  return new Promise((resolve,reject)=>{
+    const reader=new FileReader();
+    reader.onload=()=>resolve(String(reader.result).split(',')[1]||'');
+    reader.onerror=()=>reject(new Error('Não foi possível ler o documento.'));
+    reader.readAsDataURL(file);
+  });
+}
+
+function resetView(){currentConversationId=null;conversation.innerHTML='';conversation.classList.remove('active');document.body.classList.remove('chat-active');welcome.style.display='';promptInput.value='';clearAttachment();document.getElementById('count').textContent='0 / 4000';document.querySelectorAll('.history-item').forEach(x=>x.classList.remove('active'))}
 async function session(){if(!db)return null;const{data:{session}}=await db.auth.getSession();return session}
 async function authHeader(){const s=await session();return s?.access_token?{'Authorization':`Bearer ${s.access_token}`}:{}} 
 
@@ -67,10 +89,47 @@ promptInput.oninput=()=>document.getElementById('count').textContent=`${promptIn
 document.getElementById('newChat').onclick=resetView;
 document.getElementById('refreshHistory').onclick=loadHistory;
 
+
+fileInput.onchange=async()=>{
+  const file=fileInput.files?.[0];
+  if(!file)return;
+
+  const allowed=[
+    'application/pdf','text/plain','text/csv','application/json','text/markdown',
+    'application/msword','application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+    'application/rtf','image/png','image/jpeg','image/webp'
+  ];
+
+  if(!allowed.includes(file.type) && !/\.(pdf|txt|csv|json|md|doc|docx|rtf|png|jpe?g|webp)$/i.test(file.name)){
+    alert('Formato não suportado. Utilize PDF, Word, texto, CSV, JSON ou imagem.');
+    clearAttachment();
+    return;
+  }
+
+  if(file.size>4*1024*1024){
+    alert('O documento excede o limite de 4 MB desta versão.');
+    clearAttachment();
+    return;
+  }
+
+  try{
+    const data=await readFileAsBase64(file);
+    selectedAttachment={name:file.name,type:file.type||'application/octet-stream',size:file.size,data};
+    attachmentName.textContent=`${file.name} · ${formatBytes(file.size)}`;
+    attachmentPreview.hidden=false;
+    if(!promptInput.value.trim())promptInput.value='Analisa este documento e apresenta um resumo com os pontos mais importantes.';
+    document.getElementById('count').textContent=`${promptInput.value.length} / 4000`;
+  }catch(err){
+    alert(err.message);
+    clearAttachment();
+  }
+};
+removeAttachment.onclick=clearAttachment;
+
 form.onsubmit=async e=>{
   e.preventDefault();
   const text=promptInput.value.trim();
-  if(!text)return;
+  if(!text && !selectedAttachment)return;
   if(!db){
     alert('O Supabase ainda não está configurado em js/config.js.');
     return;
@@ -85,9 +144,10 @@ form.onsubmit=async e=>{
   const loading=addMessage('assistant','A preparar a resposta...');
   try{
     const headers={'Content-Type':'application/json',...(await authHeader())};
-    const r=await fetch('/.netlify/functions/ai-assistant',{method:'POST',headers,body:JSON.stringify({prompt:text,agent:currentAgent,conversationId:currentConversationId})});
+    const r=await fetch('/.netlify/functions/ai-assistant',{method:'POST',headers,body:JSON.stringify({prompt:text||'Analisa o documento anexado.',agent:currentAgent,conversationId:currentConversationId,attachment:selectedAttachment})});
     const d=await r.json();if(!r.ok)throw new Error(d.error||'Erro no assistente.');
     currentConversationId=d.conversationId||currentConversationId;loading.textContent=d.answer;
+    clearAttachment();
     await updateUsage();await loadHistory();
   }catch(err){loading.textContent=`Erro: ${err.message}`}
   finally{sendButton.disabled=false}
