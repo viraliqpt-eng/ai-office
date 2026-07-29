@@ -1,4 +1,4 @@
-const db = db || window.aiOfficeSupabase || (typeof aiOfficeSupabase !== 'undefined' ? aiOfficeSupabase : null);
+const db = window.supabaseClient || window.aiOfficeSupabase || null;
 const profiles={general:'Assistente Geral',realestate:'Assistente Imobiliário',email:'Assistente de Email',documents:'Assistente de Documentos'};
 let currentAgent='general',currentConversationId=null,currentCustomerId=null,monthlyLimit=50;
 const form=document.getElementById('form'),promptInput=document.getElementById('prompt'),conversation=document.getElementById('conversation'),welcome=document.getElementById('welcome'),sendButton=document.getElementById('sendButton');
@@ -9,15 +9,23 @@ async function session(){if(!db)return null;const{data:{session}}=await db.auth.
 async function authHeader(){const s=await session();return s?.access_token?{'Authorization':`Bearer ${s.access_token}`}:{}} 
 
 async function loadCustomer(){
-  if(!db)return;
+  if(!db){
+    document.getElementById('historyList').innerHTML =
+      '<p class="history-empty">Supabase não configurado em js/config.js.</p>';
+    return false;
+  }
   const s=await session();
-  if(!s){location.href='login.html';return}
+  if(!s){
+    location.href='login.html?redirect=intelligence.html';
+    return false;
+  }
   const{data,error}=await db.from('customers').select('id,plan').eq('auth_user_id',s.user.id).maybeSingle();
   if(error||!data){document.getElementById('historyList').innerHTML='<p class="history-empty">Perfil de cliente não encontrado.</p>';return}
   currentCustomerId=data.id;
   const limits={starter:50,business:250,complete:1000};
   monthlyLimit=limits[String(data.plan||'starter').toLowerCase()]||50;
   document.getElementById('planLabel').textContent=`Plano ${data.plan||'Starter'}`;
+  return true;
 }
 
 async function updateUsage(){
@@ -60,7 +68,18 @@ document.getElementById('newChat').onclick=resetView;
 document.getElementById('refreshHistory').onclick=loadHistory;
 
 form.onsubmit=async e=>{
-  e.preventDefault();const text=promptInput.value.trim();if(!text)return;
+  e.preventDefault();
+  const text=promptInput.value.trim();
+  if(!text)return;
+  if(!db){
+    alert('O Supabase ainda não está configurado em js/config.js.');
+    return;
+  }
+  const activeSession=await session();
+  if(!activeSession){
+    location.href='login.html?redirect=intelligence.html';
+    return;
+  }
   welcome.style.display='none';document.body.classList.add('chat-active');conversation.classList.add('active');addMessage('user',text);
   promptInput.value='';document.getElementById('count').textContent='0 / 4000';sendButton.disabled=true;
   const loading=addMessage('assistant','A preparar a resposta...');
@@ -74,4 +93,10 @@ form.onsubmit=async e=>{
   finally{sendButton.disabled=false}
 };
 
-(async()=>{await loadCustomer();await updateUsage();await loadHistory()})();
+(async()=>{
+  const authenticated = await loadCustomer();
+  if(authenticated){
+    await updateUsage();
+    await loadHistory();
+  }
+})();
