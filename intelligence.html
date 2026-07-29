@@ -1,28 +1,92 @@
 <!doctype html>
-<html lang="pt-PT"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="robots" content="noindex"><title>AI Office™ Intelligence</title>
-<link rel="stylesheet" href="css/intelligence.css"></head><body>
+<html lang="pt-PT">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex">
+  <title>AI Office™ Intelligence</title>
+  <link rel="stylesheet" href="css/intelligence.css">
+</head>
+<body>
 <div class="shell">
-<aside>
-<h2>AI OFFICE™</h2><p>Intelligence</p>
-<button class="agent active" data-agent="general">✦ Assistente Geral</button>
-<button class="agent" data-agent="realestate">⌂ Imobiliário</button>
-<button class="agent" data-agent="email">✉ Email</button>
-<button class="agent" data-agent="documents">▤ Documentos</button>
-<div class="usage"><span>Utilização mensal</span><strong id="usage">0 / 50</strong><i><b id="bar"></b></i></div>
-<a href="cliente.html">← Área de Cliente</a>
-</aside>
-<main>
-<header><div><small>AI Office™ Intelligence</small><h1 id="title">Assistente Geral</h1></div><button id="newChat">Nova conversa</button></header>
-<section id="welcome" class="welcome"><div class="orb">✦</div><h2>Como posso ajudar a sua empresa?</h2><p>Escolha uma sugestão ou escreva o seu pedido.</p>
-<div class="cards">
-<button data-prompt="Cria uma proposta comercial profissional para apresentar os serviços da minha empresa."><b>Criar proposta</b><span>Estrutura comercial pronta</span></button>
-<button data-prompt="Escreve uma resposta profissional para um cliente que pediu mais informações."><b>Responder a cliente</b><span>Email claro e profissional</span></button>
-<button data-prompt="Cria uma descrição apelativa para um imóvel com três quartos, varanda e garagem."><b>Descrição de imóvel</b><span>Texto para portais imobiliários</span></button>
-<button data-prompt="Organiza este projeto em tarefas, prioridades e próximos passos."><b>Organizar projeto</b><span>Plano de execução objetivo</span></button>
-</div></section>
-<section id="conversation" class="conversation"></section>
-<form id="form"><textarea id="prompt" maxlength="4000" placeholder="Escreva o seu pedido..."></textarea><div><span id="count">0 / 4000</span><button>Enviar ✦</button></div></form>
-<p class="note">Confirme sempre informações jurídicas, financeiras, médicas ou contratuais antes de as utilizar.</p>
-</main></div>
-<script src="js/intelligence.js"></script></body></html>
+  <aside>
+    <div class="brand">
+      <h2>AI OFFICE™</h2>
+      <p>Intelligence</p>
+    </div>
+
+    <button class="agent active" data-agent="general">✦ Assistente Geral</button>
+    <button class="agent" data-agent="realestate">⌂ Imobiliário</button>
+    <button class="agent" data-agent="email">✉ Email</button>
+    <button class="agent" data-agent="documents">▤ Documentos</button>
+
+    <section class="history">
+      <div class="history-title">
+        <span>Conversas recentes</span>
+        <button id="refreshHistory" type="button" title="Atualizar">↻</button>
+      </div>
+      <div id="historyList">
+        <p class="history-empty">A carregar...</p>
+      </div>
+    </section>
+
+    <div class="usage">
+      <span>Utilização mensal</span>
+      <strong id="usage">0 / 50</strong>
+      <i><b id="bar"></b></i>
+      <small id="planLabel">Plano Starter</small>
+    </div>
+
+    <a href="cliente.html">← Área de Cliente</a>
+  </aside>
+
+  <main>
+    <header>
+      <div>
+        <small>AI Office™ Intelligence</small>
+        <h1 id="title">Assistente Geral</h1>
+      </div>
+      <button id="newChat" type="button">Nova conversa</button>
+    </header>
+
+    <section id="welcome" class="welcome">
+      <div class="orb">✦</div>
+      <h2>Como posso ajudar a sua empresa?</h2>
+      <p>Escolha uma sugestão ou escreva o seu pedido.</p>
+
+      <div class="cards">
+        <button data-prompt="Cria uma proposta comercial profissional para apresentar os serviços da minha empresa.">
+          <b>Criar proposta</b><span>Estrutura comercial pronta</span>
+        </button>
+        <button data-prompt="Escreve uma resposta profissional para um cliente que pediu mais informações.">
+          <b>Responder a cliente</b><span>Email claro e profissional</span>
+        </button>
+        <button data-prompt="Cria uma descrição apelativa para um imóvel com três quartos, varanda e garagem.">
+          <b>Descrição de imóvel</b><span>Texto para portais imobiliários</span>
+        </button>
+        <button data-prompt="Organiza este projeto em tarefas, prioridades e próximos passos.">
+          <b>Organizar projeto</b><span>Plano de execução objetivo</span>
+        </button>
+      </div>
+    </section>
+
+    <section id="conversation" class="conversation" aria-live="polite"></section>
+
+    <form id="form">
+      <textarea id="prompt" maxlength="4000" placeholder="Escreva o seu pedido..."></textarea>
+      <div>
+        <span id="count">0 / 4000</span>
+        <button id="sendButton" type="submit">Enviar ✦</button>
+      </div>
+    </form>
+
+    <p class="note">Confirme sempre informações jurídicas, financeiras, médicas ou contratuais antes de as utilizar.</p>
+  </main>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/config.js"></script>
+<script src="js/supabase-client.js"></script>
+<script src="js/intelligence.js"></script>
+</body>
+</html>
