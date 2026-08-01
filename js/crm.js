@@ -1,5 +1,5 @@
 const db=window.supabaseClient||window.aiOfficeSupabase||null;let customerId=null,contacts=[],selected=null;const list=document.getElementById('contactList'),panel=document.getElementById('contactPanel'),dialog=document.getElementById('contactDialog'),form=document.getElementById('contactForm');
-async function init(){if(!db)return;const{data:{session}}=await db.auth.getSession();if(!session){location.href='login.html?redirect=crm.html';return}const{data}=await db.from('customers').select('id').eq('auth_user_id',session.user.id).maybeSingle();if(!data)return;customerId=data.id;load()}
+async function init(){if(!db){alert('Supabase não configurado em js/config.js.');return;}const{data:{session}}=await db.auth.getSession();if(!session){location.href='login.html?redirect=crm.html';return}const{data}=await db.from('customers').select('id').eq('auth_user_id',session.user.id).maybeSingle();if(!data)return;customerId=data.id;load()}
 async function load(){const{data,error}=await db.from('crm_contacts').select('*').eq('customer_id',customerId).order('updated_at',{ascending:false});if(error){list.innerHTML='<p>Erro ao carregar CRM.</p>';return}contacts=data||[];render();stats()}
 function shown(){const q=document.getElementById('search').value.toLowerCase(),s=document.getElementById('statusFilter').value;return contacts.filter(c=>(!q||[c.full_name,c.company,c.email].filter(Boolean).join(' ').toLowerCase().includes(q))&&(!s||c.status===s))}
 function render(){const rows=shown();list.innerHTML=rows.length?'':'<p style="padding:20px">Ainda não existem contactos.</p>';rows.forEach(c=>{const r=document.createElement('div');r.className='contact-row';r.innerHTML=`<div><strong>${esc(c.full_name)}</strong><small>${esc(c.company||'Sem empresa')}</small></div><div><small>${esc(c.email||'Sem email')}</small></div><div><span class="badge">${label(c.status)}</span></div><div><strong>${money(c.estimated_value)}</strong></div>`;r.onclick=()=>select(c);list.appendChild(r)})}
@@ -17,8 +17,17 @@ Próxima ação: ${selected.next_action||'—'}`;localStorage.setItem('aiOfficeP
 ${ctx}`:`Cria um resumo comercial e recomenda os próximos passos.
 
 ${ctx}`);location.href='intelligence.html'};
-document.getElementById('newContact').onclick=()=>openDialog();document.getElementById('cancelDialog').onclick=()=>dialog.close();document.getElementById('search').oninput=render;document.getElementById('statusFilter').onchange=render;document.getElementById('aiSummary').onclick=()=>{const s=shown().slice(0,25).map(c=>`${c.full_name} | ${label(c.status)} | ${money(c.estimated_value)} | ${c.next_action||'sem próxima ação'}`).join('
-');localStorage.setItem('aiOfficePendingPrompt',`Analisa estes contactos. Identifica prioridades, riscos e próximas ações.
+document.getElementById('newContact').onclick=()=>openDialog();document.getElementById('cancelDialog').onclick=()=>dialog.close();document.getElementById('search').oninput=render;document.getElementById('statusFilter').onchange=render;document.getElementById('aiSummary').onclick=()=>{
+  const s=shown()
+    .slice(0,25)
+    .map(c=>`${c.full_name} | ${label(c.status)} | ${money(c.estimated_value)} | ${c.next_action||'sem próxima ação'}`)
+    .join('\n');
 
-${s}`);location.href='intelligence.html'};
+  localStorage.setItem(
+    'aiOfficePendingPrompt',
+    `Analisa estes contactos. Identifica prioridades, riscos e próximas ações.\n\n${s}`
+  );
+
+  location.href='intelligence.html';
+};
 function val(id){return document.getElementById(id).value.trim()||null}function label(s){return({lead:'Lead',contactado:'Contactado',proposta:'Proposta enviada',negociacao:'Negociação',cliente:'Cliente',perdido:'Perdido'})[s]||s}function money(v){return new Intl.NumberFormat('pt-PT',{style:'currency',currency:'EUR'}).format(Number(v||0))}function esc(v){return String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}init();
