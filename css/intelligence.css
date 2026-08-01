@@ -86,3 +86,65 @@ form button:disabled{opacity:.55}.note{text-align:center;color:var(--muted);font
   font-size:12px;
   opacity:.9;
 }
+
+.document-library{margin-top:14px}
+.document-item{
+  width:100%;
+  border:1px solid #ffffff14;
+  background:#ffffff0b;
+  color:#fff;
+  border-radius:10px;
+  padding:10px;
+  text-align:left;
+  cursor:pointer;
+}
+.document-item:hover,.document-item.active{
+  background:#ffffff18;
+  border-color:#ffffff30;
+}
+.document-item strong,.document-item small{display:block}
+.document-item strong{
+  font-size:12px;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.document-item small{font-size:10px;color:#BFDBFE;margin-top:4px}
+.active-document-bar{
+  width:min(900px,90%);
+  margin:22px auto 0;
+  padding:12px 14px;
+  border:1px solid #BFDBFE;
+  border-radius:12px;
+  background:#EFF6FF;
+  color:#1E3A8A;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+}
+.active-document-bar[hidden]{display:none}
+.active-document-bar small,.active-document-bar strong{display:block}
+.active-document-bar small{
+  text-transform:uppercase;
+  letter-spacing:.08em;
+  font-size:10px;
+  font-weight:800;
+}
+.active-document-bar strong{
+  margin-top:3px;
+  font-size:13px;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  max-width:620px;
+}
+.active-document-bar button{
+  border:1px solid #93C5FD;
+  background:#fff;
+  color:#1E3A8A;
+  border-radius:9px;
+  padding:8px 10px;
+  font-weight:800;
+  cursor:pointer;
+}

@@ -30,6 +30,16 @@
       </div>
     </section>
 
+    <section class="document-library">
+      <div class="history-title">
+        <span>Documentos recentes</span>
+        <button id="refreshDocuments" type="button" title="Atualizar">↻</button>
+      </div>
+      <div id="documentList">
+        <p class="history-empty">A carregar...</p>
+      </div>
+    </section>
+
     <div class="usage">
       <span>Utilização mensal</span>
       <strong id="usage">0 / 50</strong>
@@ -68,6 +78,14 @@
           <b>Organizar projeto</b><span>Plano de execução objetivo</span>
         </button>
       </div>
+    </section>
+
+    <section id="activeDocumentBar" class="active-document-bar" hidden>
+      <div>
+        <small>Documento ativo</small>
+        <strong id="activeDocumentName"></strong>
+      </div>
+      <button id="clearActiveDocument" type="button">Fechar documento</button>
     </section>
 
     <section id="conversation" class="conversation" aria-live="polite"></section>

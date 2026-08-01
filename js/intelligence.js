@@ -1,8 +1,9 @@
 const db = window.supabaseClient || window.aiOfficeSupabase || null;
 const profiles={general:'Assistente Geral',realestate:'Assistente Imobiliário',email:'Assistente de Email',documents:'Assistente de Documentos'};
-let currentAgent='general',currentConversationId=null,currentCustomerId=null,monthlyLimit=50;
+let currentAgent='general',currentConversationId=null,currentCustomerId=null,monthlyLimit=50,currentDocumentId=null;
 const form=document.getElementById('form'),promptInput=document.getElementById('prompt'),conversation=document.getElementById('conversation'),welcome=document.getElementById('welcome'),sendButton=document.getElementById('sendButton');
 const fileInput=document.getElementById('fileInput'),attachmentPreview=document.getElementById('attachmentPreview'),attachmentName=document.getElementById('attachmentName'),removeAttachment=document.getElementById('removeAttachment');
+const activeDocumentBar=document.getElementById('activeDocumentBar'),activeDocumentName=document.getElementById('activeDocumentName'),clearActiveDocument=document.getElementById('clearActiveDocument');
 let selectedAttachment=null;
 
 function addMessage(role,text){const el=document.createElement('article');el.className=`message ${role}`;el.textContent=text;conversation.appendChild(el);return el}
@@ -17,6 +18,23 @@ function clearAttachment(){
   attachmentPreview.hidden=true;
   attachmentName.textContent='';
 }
+function setActiveDocument(doc){
+  currentDocumentId=doc?.id||null;
+  if(!currentDocumentId){
+    activeDocumentBar.hidden=true;
+    activeDocumentName.textContent='';
+    document.querySelectorAll('.document-item').forEach(x=>x.classList.remove('active'));
+    return;
+  }
+  activeDocumentBar.hidden=false;
+  activeDocumentName.textContent=doc.filename||'Documento';
+  document.querySelectorAll('.document-item').forEach(x=>x.classList.toggle('active',x.dataset.id===currentDocumentId));
+  if(!promptInput.value.trim()){
+    promptInput.value='Faz uma pergunta sobre este documento.';
+    document.getElementById('count').textContent=`${promptInput.value.length} / 4000`;
+  }
+}
+
 function readFileAsBase64(file){
   return new Promise((resolve,reject)=>{
     const reader=new FileReader();
@@ -26,7 +44,7 @@ function readFileAsBase64(file){
   });
 }
 
-function resetView(){currentConversationId=null;conversation.innerHTML='';conversation.classList.remove('active');document.body.classList.remove('chat-active');welcome.style.display='';promptInput.value='';clearAttachment();document.getElementById('count').textContent='0 / 4000';document.querySelectorAll('.history-item').forEach(x=>x.classList.remove('active'))}
+function resetView(){currentConversationId=null;conversation.innerHTML='';conversation.classList.remove('active');document.body.classList.remove('chat-active');welcome.style.display='';promptInput.value='';clearAttachment();setActiveDocument(null);document.getElementById('count').textContent='0 / 4000';document.querySelectorAll('.history-item').forEach(x=>x.classList.remove('active'))}
 async function session(){if(!db)return null;const{data:{session}}=await db.auth.getSession();return session}
 async function authHeader(){const s=await session();return s?.access_token?{'Authorization':`Bearer ${s.access_token}`}:{}} 
 
@@ -72,6 +90,42 @@ async function loadHistory(){
   });
 }
 
+
+async function loadDocuments(){
+  const list=document.getElementById('documentList');
+  if(!currentCustomerId){
+    list.innerHTML='<p class="history-empty">Sem documentos disponíveis.</p>';
+    return;
+  }
+  const{data,error}=await db
+    .from('ai_documents')
+    .select('id,filename,mime_type,file_size,created_at,status')
+    .eq('customer_id',currentCustomerId)
+    .is('deleted_at',null)
+    .eq('status','ready')
+    .order('created_at',{ascending:false})
+    .limit(12);
+
+  if(error){
+    list.innerHTML='<p class="history-empty">Não foi possível carregar.</p>';
+    return;
+  }
+  if(!data?.length){
+    list.innerHTML='<p class="history-empty">Ainda não existem documentos.</p>';
+    return;
+  }
+
+  list.innerHTML='';
+  data.forEach(doc=>{
+    const btn=document.createElement('button');
+    btn.className='document-item';
+    btn.dataset.id=doc.id;
+    btn.innerHTML=`<strong>${doc.filename}</strong><small>${formatBytes(doc.file_size||0)}</small>`;
+    btn.onclick=()=>setActiveDocument(doc);
+    list.appendChild(btn);
+  });
+}
+
 async function openConversation(item,button){
   currentConversationId=item.id;currentAgent=item.agent_type||'general';
   document.getElementById('title').textContent=profiles[currentAgent]||profiles.general;
@@ -88,6 +142,8 @@ document.querySelectorAll('[data-prompt]').forEach(btn=>btn.onclick=()=>{promptI
 promptInput.oninput=()=>document.getElementById('count').textContent=`${promptInput.value.length} / 4000`;
 document.getElementById('newChat').onclick=resetView;
 document.getElementById('refreshHistory').onclick=loadHistory;
+document.getElementById('refreshDocuments').onclick=loadDocuments;
+clearActiveDocument.onclick=()=>setActiveDocument(null);
 
 
 fileInput.onchange=async()=>{
@@ -144,11 +200,12 @@ form.onsubmit=async e=>{
   const loading=addMessage('assistant','A preparar a resposta...');
   try{
     const headers={'Content-Type':'application/json',...(await authHeader())};
-    const r=await fetch('/.netlify/functions/ai-assistant',{method:'POST',headers,body:JSON.stringify({prompt:text||'Analisa o documento anexado.',agent:currentAgent,conversationId:currentConversationId,attachment:selectedAttachment})});
+    const r=await fetch('/.netlify/functions/ai-assistant',{method:'POST',headers,body:JSON.stringify({prompt:text||'Analisa o documento anexado.',agent:currentAgent,conversationId:currentConversationId,attachment:selectedAttachment,documentId:currentDocumentId})});
     const d=await r.json();if(!r.ok)throw new Error(d.error||'Erro no assistente.');
     currentConversationId=d.conversationId||currentConversationId;loading.textContent=d.answer;
+    if(d.document?.id){setActiveDocument(d.document);}
     clearAttachment();
-    await updateUsage();await loadHistory();
+    await updateUsage();await loadHistory();await loadDocuments();
   }catch(err){loading.textContent=`Erro: ${err.message}`}
   finally{sendButton.disabled=false}
 };
@@ -158,5 +215,6 @@ form.onsubmit=async e=>{
   if(authenticated){
     await updateUsage();
     await loadHistory();
+    await loadDocuments();
   }
 })();
