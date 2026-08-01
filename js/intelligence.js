@@ -218,3 +218,5 @@ form.onsubmit=async e=>{
     await loadDocuments();
   }
 })();
+
+const pendingPrompt=localStorage.getItem('aiOfficePendingPrompt');if(pendingPrompt){localStorage.removeItem('aiOfficePendingPrompt');promptInput.value=pendingPrompt;document.getElementById('count').textContent=`${promptInput.value.length} / 4000`;}
