@@ -156,8 +156,8 @@ function sendToAI(mode){
   sessionStorage.setItem('aiOfficeEmailDraft',JSON.stringify(current));
 
   const prompt=mode==='generate'
-    ? `Escreve um email profissional em português de Portugal para ${current.recipientName||'o cliente'} (${current.recipientEmail||'email não indicado'}). Objetivo/assunto: ${current.subject||'acompanhamento comercial'}. Responde apenas com:\\nAssunto: ...\\n\\nCorpo do email.`
-    : `Melhora este email profissional, mantendo o sentido e tornando-o claro, cordial e persuasivo. Responde apenas com:\\nAssunto: ...\\n\\nCorpo do email.\\n\\nDestinatário: ${current.recipientName||'cliente'}\\nAssunto atual: ${current.subject}\\n\\n${current.body}`;
+    ? `Escreve um email profissional em português de Portugal para ${current.recipientName||'o cliente'} (${current.recipientEmail||'email não indicado'}). Objetivo/assunto: ${current.subject||'acompanhamento comercial'}. Responde apenas com:\nAssunto: ...\n\nCorpo do email.`
+    : `Melhora este email profissional, mantendo o sentido e tornando-o claro, cordial e persuasivo. Responde apenas com:\nAssunto: ...\n\nCorpo do email.\\n\\nDestinatário: ${current.recipientName||'cliente'}\nAssunto atual: ${current.subject}\n\n${current.body}`;
 
   const returnContext={
     type:'email',

@@ -204,6 +204,9 @@ form.onsubmit=async e=>{
     const d=await r.json();if(!r.ok)throw new Error(d.error||'Erro no assistente.');
     currentConversationId=d.conversationId||currentConversationId;loading.textContent=d.answer;
     latestAssistantAnswer=d.answer||'';
+    if(aiReturnContext && latestAssistantAnswer){
+      aiResultActions.hidden=false;
+    }
     if(d.document?.id){setActiveDocument(d.document);}
     clearAttachment();
     await updateUsage();await loadHistory();await loadDocuments();
@@ -244,7 +247,7 @@ function loadAIReturnContext(){
   }
 
   aiResultOriginLabel.textContent=aiReturnContext.label||'Módulo de origem';
-  aiResultActions.hidden=false;
+  aiResultActions.hidden=true;
 }
 
 function extractEmailParts(text){
