@@ -29,3 +29,20 @@ input,select,textarea{width:100%;border:1px solid var(--line);border-radius:9px;
 .ai-tools{display:flex;gap:10px;margin-top:12px}.ai-tools button:last-child{background:#eef4ff;color:#1d4ed8}
 .dialog-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:20px}
 @media(max-width:950px){.sidebar{position:static;width:auto}.sidebar nav{grid-template-columns:repeat(5,1fr)}main{margin-left:0}.layout{grid-template-columns:1fr}.stats{grid-template-columns:1fr}}
+#emailDialog{
+  max-width:720px;
+}
+#emailDialog form{
+  max-height:82vh;
+  padding:20px;
+}
+#emailDialog textarea{
+  min-height:210px;
+  resize:vertical;
+}
+#emailDialog .grid{
+  gap:10px;
+}
+#emailDialog label{
+  margin-top:9px;
+}

@@ -203,6 +203,7 @@ form.onsubmit=async e=>{
     const r=await fetch('/.netlify/functions/ai-assistant',{method:'POST',headers,body:JSON.stringify({prompt:text||'Analisa o documento anexado.',agent:currentAgent,conversationId:currentConversationId,attachment:selectedAttachment,documentId:currentDocumentId})});
     const d=await r.json();if(!r.ok)throw new Error(d.error||'Erro no assistente.');
     currentConversationId=d.conversationId||currentConversationId;loading.textContent=d.answer;
+    latestAssistantAnswer=d.answer||'';
     if(d.document?.id){setActiveDocument(d.document);}
     clearAttachment();
     await updateUsage();await loadHistory();await loadDocuments();
@@ -220,3 +221,76 @@ form.onsubmit=async e=>{
 })();
 
 const pendingPrompt=localStorage.getItem('aiOfficePendingPrompt');if(pendingPrompt){localStorage.removeItem('aiOfficePendingPrompt');promptInput.value=pendingPrompt;document.getElementById('count').textContent=`${promptInput.value.length} / 4000`;}
+
+const aiResultActions=document.getElementById('aiResultActions');
+const aiResultOriginLabel=document.getElementById('aiResultOriginLabel');
+const useAIResult=document.getElementById('useAIResult');
+const cancelAIResult=document.getElementById('cancelAIResult');
+
+let aiReturnContext=null;
+let latestAssistantAnswer='';
+
+function loadAIReturnContext(){
+  try{
+    const raw=sessionStorage.getItem('aiOfficeReturnContext');
+    aiReturnContext=raw?JSON.parse(raw):null;
+  }catch{
+    aiReturnContext=null;
+  }
+
+  if(!aiReturnContext){
+    aiResultActions.hidden=true;
+    return;
+  }
+
+  aiResultOriginLabel.textContent=aiReturnContext.label||'Módulo de origem';
+  aiResultActions.hidden=false;
+}
+
+function extractEmailParts(text){
+  const clean=String(text||'').trim();
+  const subjectMatch=clean.match(/(?:^|\n)\s*Assunto\s*:\s*(.+)/i);
+  const subject=subjectMatch?subjectMatch[1].trim():'';
+
+  let body=clean;
+  if(subjectMatch){
+    body=body.replace(subjectMatch[0],'').trim();
+  }
+
+  body=body
+    .replace(/\n?Sugestões adicionais[\s\S]*$/i,'')
+    .trim();
+
+  return {subject,body};
+}
+
+if(useAIResult){
+  useAIResult.onclick=()=>{
+    if(!aiReturnContext||!latestAssistantAnswer){
+      alert('Ainda não existe uma resposta da IA para utilizar.');
+      return;
+    }
+
+    const parsed=extractEmailParts(latestAssistantAnswer);
+    const payload={
+      ...aiReturnContext,
+      aiSubject:parsed.subject,
+      aiBody:parsed.body,
+      completedAt:new Date().toISOString()
+    };
+
+    sessionStorage.setItem('aiOfficeReturnedContent',JSON.stringify(payload));
+    sessionStorage.removeItem('aiOfficeReturnContext');
+    location.href=aiReturnContext.returnUrl||'emails.html';
+  };
+}
+
+if(cancelAIResult){
+  cancelAIResult.onclick=()=>{
+    sessionStorage.removeItem('aiOfficeReturnContext');
+    aiReturnContext=null;
+    aiResultActions.hidden=true;
+  };
+}
+
+loadAIReturnContext();

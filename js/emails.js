@@ -143,15 +143,30 @@ els.form.onsubmit=async e=>{
 };
 
 function sendToAI(mode){
-  const name=document.getElementById('recipientName').value.trim()||'cliente';
-  const email=document.getElementById('recipientEmail').value.trim()||'não indicado';
-  const subject=document.getElementById('subject').value.trim();
-  const body=document.getElementById('body').value.trim();
+  const current={
+    emailId:document.getElementById('emailId').value||'',
+    contactId:document.getElementById('contactId').value||'',
+    recipientName:document.getElementById('recipientName').value.trim(),
+    recipientEmail:document.getElementById('recipientEmail').value.trim(),
+    subject:document.getElementById('subject').value.trim(),
+    body:document.getElementById('body').value.trim(),
+    status:document.getElementById('status').value
+  };
+
+  sessionStorage.setItem('aiOfficeEmailDraft',JSON.stringify(current));
 
   const prompt=mode==='generate'
-    ? `Escreve um email profissional em português de Portugal para ${name} (${email}). Objetivo/assunto: ${subject||'acompanhamento comercial'}. Inclui assunto e corpo do email.`
-    : `Melhora este email profissional, mantendo o sentido e tornando-o claro, cordial e persuasivo.\n\nDestinatário: ${name}\nAssunto: ${subject}\n\n${body}`;
+    ? `Escreve um email profissional em português de Portugal para ${current.recipientName||'o cliente'} (${current.recipientEmail||'email não indicado'}). Objetivo/assunto: ${current.subject||'acompanhamento comercial'}. Responde apenas com:\\nAssunto: ...\\n\\nCorpo do email.`
+    : `Melhora este email profissional, mantendo o sentido e tornando-o claro, cordial e persuasivo. Responde apenas com:\\nAssunto: ...\\n\\nCorpo do email.\\n\\nDestinatário: ${current.recipientName||'cliente'}\\nAssunto atual: ${current.subject}\\n\\n${current.body}`;
 
+  const returnContext={
+    type:'email',
+    label:'Email inteligente',
+    returnUrl:'emails.html',
+    mode
+  };
+
+  sessionStorage.setItem('aiOfficeReturnContext',JSON.stringify(returnContext));
   localStorage.setItem('aiOfficePendingPrompt',prompt);
   location.href='intelligence.html';
 }
@@ -192,4 +207,38 @@ els.statusFilter.onchange=renderEmails;
 function statusLabel(v){return ({draft:'Rascunho',ready:'Preparado',sent:'Enviado'})[v]||v}
 function esc(v){return String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
 
-init();
+
+function restoreReturnedAIContent(){
+  let savedDraft=null;
+  let returned=null;
+
+  try{
+    const rawDraft=sessionStorage.getItem('aiOfficeEmailDraft');
+    savedDraft=rawDraft?JSON.parse(rawDraft):null;
+
+    const rawReturned=sessionStorage.getItem('aiOfficeReturnedContent');
+    returned=rawReturned?JSON.parse(rawReturned):null;
+  }catch{
+    savedDraft=null;
+    returned=null;
+  }
+
+  if(!savedDraft) return;
+
+  openDialog({
+    id:savedDraft.emailId||'',
+    contact_id:savedDraft.contactId||null,
+    recipient_name:savedDraft.recipientName||'',
+    recipient_email:savedDraft.recipientEmail||'',
+    subject:(returned?.aiSubject||savedDraft.subject||''),
+    body:(returned?.aiBody||savedDraft.body||''),
+    status:savedDraft.status||'draft'
+  });
+
+  if(returned?.aiBody){
+    sessionStorage.removeItem('aiOfficeReturnedContent');
+  }
+}
+
+
+init().then(restoreReturnedAIContent);
