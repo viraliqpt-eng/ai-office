@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="pt-PT">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Emails Inteligentes — AI Office™</title>
+  <link rel="stylesheet" href="css/emails.css">
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="brand">AI OFFICE™<span>Emails Inteligentes</span></div>
+    <nav>
+      <a href="intelligence.html">✦ Intelligence</a>
+      <a href="crm.html">◉ CRM</a>
+      <a href="tasks.html">✓ Tarefas</a>
+      <a class="active" href="emails.html">✉ Emails</a>
+      <a href="cliente.html">← Área de Cliente</a>
+    </nav>
+  </aside>
+
+  <main>
+    <header>
+      <div>
+        <small>AI OFFICE™</small>
+        <h1>Emails Inteligentes</h1>
+        <p>Crie, guarde e prepare mensagens comerciais com apoio da IA.</p>
+      </div>
+      <button id="newEmail">+ Novo email</button>
+    </header>
+
+    <section class="stats">
+      <article><span>Rascunhos</span><strong id="statDrafts">0</strong></article>
+      <article><span>Preparados</span><strong id="statReady">0</strong></article>
+      <article><span>Enviados</span><strong id="statSent">0</strong></article>
+    </section>
+
+    <section class="toolbar">
+      <input id="search" type="search" placeholder="Pesquisar por destinatário, assunto ou conteúdo...">
+      <select id="statusFilter">
+        <option value="">Todos os estados</option>
+        <option value="draft">Rascunho</option>
+        <option value="ready">Preparado</option>
+        <option value="sent">Enviado</option>
+      </select>
+    </section>
+
+    <section class="layout">
+      <div id="emailList" class="email-list"></div>
+
+      <aside id="emailPanel" class="email-panel">
+        <p class="empty">Selecione um email para ver os detalhes.</p>
+      </aside>
+    </section>
+  </main>
+
+  <dialog id="emailDialog">
+    <form id="emailForm" method="dialog">
+      <h2 id="dialogTitle">Novo email</h2>
+      <input type="hidden" id="emailId">
+
+      <label>Contacto
+        <select id="contactId">
+          <option value="">Sem contacto associado</option>
+        </select>
+      </label>
+
+      <div class="grid">
+        <label>Nome do destinatário<input id="recipientName"></label>
+        <label>Email do destinatário<input id="recipientEmail" type="email"></label>
+      </div>
+
+      <label>Assunto<input id="subject" required></label>
+      <label>Mensagem<textarea id="body" rows="12" required></textarea></label>
+
+      <div class="ai-tools">
+        <button type="button" id="generateAI">Gerar com IA</button>
+        <button type="button" id="improveAI">Melhorar com IA</button>
+      </div>
+
+      <label>Estado
+        <select id="status">
+          <option value="draft">Rascunho</option>
+          <option value="ready">Preparado</option>
+          <option value="sent">Enviado</option>
+        </select>
+      </label>
+
+      <div class="dialog-actions">
+        <button type="button" id="cancelDialog">Cancelar</button>
+        <button type="submit">Guardar</button>
+      </div>
+    </form>
+  </dialog>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/config.js"></script>
+  <script src="js/supabase-client.js"></script>
+  <script src="js/emails.js"></script>
+</body>
+</html>

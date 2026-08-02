@@ -1,0 +1,31 @@
+:root{--navy:#08233b;--blue:#2563eb;--bg:#f4f7fb;--line:#dfe7f1;--text:#10273d}
+*{box-sizing:border-box}body{margin:0;font-family:Inter,system-ui,sans-serif;background:var(--bg);color:var(--text)}
+.sidebar{position:fixed;inset:0 auto 0 0;width:230px;background:var(--navy);color:#fff;padding:28px 18px}
+.brand{font-weight:900;font-size:21px}.brand span{display:block;font-size:14px;color:#8ec5ff;margin-top:6px}
+nav{display:grid;gap:10px;margin-top:32px}nav a{color:#dbeafe;text-decoration:none;padding:12px;border-radius:10px;font-weight:700}
+nav a.active,nav a:hover{background:#ffffff14;color:#fff}
+main{margin-left:230px;padding:34px;max-width:1500px}
+header{display:flex;justify-content:space-between;align-items:center;gap:20px}
+header small{color:var(--blue);font-weight:900;letter-spacing:.12em}h1{margin:5px 0 6px;font-size:34px}
+header p{margin:0;color:#64748b}button{border:0;border-radius:10px;padding:11px 15px;font-weight:800;cursor:pointer}
+#newEmail,.dialog-actions button:last-child,.ai-tools button:first-child{background:var(--blue);color:#fff}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:28px 0}
+.stats article{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px}
+.stats span{color:#64748b;font-size:13px}.stats strong{display:block;margin-top:6px;font-size:25px}
+.toolbar{display:flex;gap:10px;margin-bottom:18px}.toolbar input,.toolbar select{border:1px solid var(--line);border-radius:10px;padding:12px;background:#fff}
+.toolbar input{flex:1}.layout{display:grid;grid-template-columns:minmax(500px,1fr) 420px;gap:18px}
+.email-list,.email-panel{background:#fff;border:1px solid var(--line);border-radius:14px;min-height:560px}
+.email-row{display:grid;grid-template-columns:1.1fr 1.5fr .6fr;gap:12px;padding:16px;border-bottom:1px solid var(--line);cursor:pointer}
+.email-row:hover{background:#f8fbff}.email-row strong,.email-row small{display:block}.email-row small{color:#64748b;margin-top:4px}
+.badge{display:inline-block;padding:5px 8px;border-radius:999px;background:#e8f0ff;color:#1d4ed8;font-size:11px;font-weight:800}
+.email-panel{padding:22px}.email-panel h2{margin-top:0}.detail-grid{display:grid;gap:12px;margin:18px 0}
+.detail-grid div{padding:12px;background:#f8fafc;border-radius:10px}.detail-grid span{display:block;color:#64748b;font-size:12px}
+.email-body{white-space:pre-wrap;line-height:1.55}.panel-actions{display:flex;gap:8px;flex-wrap:wrap}
+.panel-actions button{background:#eaf1ff;color:#1d4ed8}.empty{padding:20px;color:#64748b}
+dialog{border:0;border-radius:16px;padding:0;max-width:760px;width:90%;box-shadow:0 24px 70px #0003}
+dialog::backdrop{background:#0f172a88}form{padding:24px;max-height:88vh;overflow:auto}form h2{margin-top:0}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}label{display:grid;gap:6px;font-weight:700;font-size:13px;margin-top:12px}
+input,select,textarea{width:100%;border:1px solid var(--line);border-radius:9px;padding:11px;font:inherit}
+.ai-tools{display:flex;gap:10px;margin-top:12px}.ai-tools button:last-child{background:#eef4ff;color:#1d4ed8}
+.dialog-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:20px}
+@media(max-width:950px){.sidebar{position:static;width:auto}.sidebar nav{grid-template-columns:repeat(5,1fr)}main{margin-left:0}.layout{grid-template-columns:1fr}.stats{grid-template-columns:1fr}}
