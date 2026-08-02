@@ -91,6 +91,7 @@ function selectEmail(email){
     <div class="panel-actions">
       <button onclick="editSelected()">Editar</button>
       <button onclick="copySelected()">Copiar</button>
+      <button onclick="sendSelectedEmail()">Enviar agora</button>
       <button onclick="openMailClient()">Abrir no email</button>
       <button onclick="markSent()">Marcar enviado</button>
       <button onclick="deleteSelected()">Eliminar</button>
@@ -177,6 +178,23 @@ window.copySelected=async()=>{
   await navigator.clipboard.writeText(`Assunto: ${selectedEmail.subject}\n\n${selectedEmail.body}`);
   alert('Email copiado.');
 };
+window.sendSelectedEmail=async()=>{
+  if(!selectedEmail)return;
+  if(!selectedEmail.recipient_email){alert('Adicione o email do destinatário antes de enviar.');return;}
+  if(!confirm(`Enviar agora para ${selectedEmail.recipient_email}?`))return;
+  const button=[...document.querySelectorAll('.panel-actions button')].find(b=>b.textContent.trim()==='Enviar agora');
+  if(button){button.disabled=true;button.textContent='A enviar...';}
+  try{
+    const {data:{session}}=await db.auth.getSession();
+    if(!session)throw new Error('Sessão inválida. Inicie sessão novamente.');
+    const response=await fetch('/.netlify/functions/send-email',{method:'POST',headers:{'Content-Type':'application/json','Authorization':`Bearer ${session.access_token}`},body:JSON.stringify({draftId:selectedEmail.id})});
+    const text=await response.text();let result;try{result=JSON.parse(text)}catch{throw new Error(`Resposta inesperada do servidor (${response.status}).`)}
+    if(!response.ok)throw new Error(result.error||`Não foi possível enviar (${response.status}).`);
+    alert('Email enviado com sucesso.');await loadEmails();const updated=emails.find(e=>e.id===selectedEmail.id);if(updated)selectEmail(updated);
+  }catch(error){alert(error.message||'Não foi possível enviar o email.');}
+  finally{if(button){button.disabled=false;button.textContent='Enviar agora';}}
+};
+
 window.openMailClient=()=>{
   if(!selectedEmail)return;
   const href=`mailto:${encodeURIComponent(selectedEmail.recipient_email||'')}?subject=${encodeURIComponent(selectedEmail.subject||'')}&body=${encodeURIComponent(selectedEmail.body||'')}`;

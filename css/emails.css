@@ -46,3 +46,5 @@ input,select,textarea{width:100%;border:1px solid var(--line);border-radius:9px;
 #emailDialog label{
   margin-top:9px;
 }
+
+.panel-actions button:disabled{opacity:.6;cursor:not-allowed;}
